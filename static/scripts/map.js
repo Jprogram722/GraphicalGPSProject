@@ -5,8 +5,8 @@
     // Define a custom icon using the 'user.png' image
     const customIcon = L.icon({
         iconUrl: '../static/user.png',
-        iconSize: [50, 50], 
-        iconAnchor: [16, 16], 
+        iconSize: [75, 75], 
+        iconAnchor: [36, 60], 
         popupAnchor: [0, -16] 
     });
 
