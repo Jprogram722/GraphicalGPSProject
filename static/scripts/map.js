@@ -1,6 +1,13 @@
 (() => {
     let map = L.map('map').setView([44.650627, -63.597140], 14);
     let centerMarker = null; // Define the marker variable
+    
+    // fetching sample data
+    setInterval(() => {
+        fetch('/api/test-data').then((response) => {
+            console.log(response.json());
+        })
+    }, 5000);
 
     // Define a custom icon using the 'user.png' image
     const customIcon = L.icon({
