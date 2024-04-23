@@ -1,34 +1,38 @@
 (() => {
     let map = L.map('map').setView([44.650627, -63.597140], 14);
-    let centerMarker = null;
- 
+    let centerMarker = null; // Define the marker variable
+
+    // Define a custom icon using the 'user.png' image
+    const customIcon = L.icon({
+        iconUrl: '../static/user.png',
+        iconSize: [50, 50], 
+        iconAnchor: [16, 16], 
+        popupAnchor: [0, -16] 
+    });
+
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
- 
+
     const campusMarker = L.marker([44.66941024799195, -63.61346907985597]).addTo(map)
         .bindPopup('NSCC IT Campus')
         .openPopup();
- 
+
     const updateCenterMarker = () => {
-        // Updating the marker ot the center of screen
         if (centerMarker) {
-            centerMarker.setLatLng(map.getCenter());
-        // The marker for the current location
+            centerMarker.setLatLng(map.getCenter()); // Update marker position to the new center
         } else {
-            centerMarker = L.marker(map.getCenter(), { autoPan: false })
+            centerMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }) // Add marker with custom icon
                 .bindPopup('This is your current location')
                 .openPopup()
                 .addTo(map);
         }
     };
- 
-    // Waiting for the map to move around
-    map.on('moveend', updateCenterMarker);
- 
-    // Have it refresh the layer for the marker to move
+
+    map.on('moveend', updateCenterMarker); // Listen for map move end event
+
     setInterval(() => {
-        map.invalidateSize();
+        map.invalidateSize(); // Refresh map size to ensure correct centering
     }, 1000);
 })();
