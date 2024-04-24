@@ -1,15 +1,20 @@
 (async () => {
-    let map = L.map('map').setView([44.650627, -63.597140], 14);
+    let map = L.map('map');
+    map.setView([44.650627, -63.597140], 14)
     let centerMarker = null; // Define the marker variable
     let previousLocation = null;
     let currentBearing = 90;
     
     // fetching sample data
-    // setInterval(async () => {
-    //     let res = await fetch('/api/test-data');
-    //     let data = await res.json();
-    //     console.log(data);
-    // }, 5000);
+    setInterval(async () => {
+        let res = await fetch('/api/test-data');
+        let data = await res.json();
+        console.log(data);
+
+        if(data.Status === "Success"){
+            map.setView([data.Latitude, data.Longitude], 14);
+        }
+    }, 5000);
 
     // Define a custom icon using the 'user.png' image
     const customIcon = L.icon({
