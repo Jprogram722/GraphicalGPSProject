@@ -1,0 +1,18 @@
+{
+  "name": "gps-npm-libraries",
+  "version": "1.0.0",
+  "description": "NPM package containing libraries for the GPS project",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jprogram722/GraphicalGPSProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Jprogram722/GraphicalGPSProject/issues"
+  },
+  "homepage": "https://github.com/Jprogram722/GraphicalGPSProject#readme",
+  "dependencies": {
+    "leaflet-rotatedmarker": "^0.2.0"
+  }
+}
