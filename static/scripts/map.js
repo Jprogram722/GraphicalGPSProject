@@ -18,11 +18,6 @@
         let res = await fetch('/api/test-data');
         let data = await res.json();
         console.log(data);
-
-        if(data.Status === "Success"){
-            map.setView([data.Latitude, data.Longitude], 14);
-            updateMarker([data.Latitude, data.Longitude]);
-        }
     }, 5000);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -34,9 +29,9 @@
         .bindPopup('NSCC IT Campus')
         .openPopup();
 
-    const updateMarker = (corrdinates) => {
+    const updateMarker = () => {
         previousMaker.setLatLng(new L.LatLng(currentMarker._latlng.lat, currentMarker._latlng.lng));
-        currentMarker.setLatLng(new L.LatLng(corrdinates[0], corrdinates[1])); // Update marker position to the new center
+        currentMarker.setLatLng(map.getCenter()); // Update marker position to the new center
 
         let deltaLat = currentMarker._latlng.lat - previousMaker._latlng.lat;
         let deltaLng = currentMarker._latlng.lng - previousMaker._latlng.lng;
@@ -48,7 +43,7 @@
         currentMarker.setRotationAngle(currentBearing);
     };
 
-    // map.on('moveend', updateMarker); // Listen for map move end event
+    map.on('moveend', updateMarker); // Listen for map move end event
 
     setInterval(() => {
         map.invalidateSize(); // Refresh map size to ensure correct centering
