@@ -13,6 +13,9 @@
     let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }) // Add marker with custom icon;
     let previousMaker = L.marker(map.getCenter(), {opacity: 0})
 
+    currentMarker.addTo(map);
+    previousMaker.addTo(map);
+
     // fetching sample data
     setInterval(async () => {
         let res = await fetch('/api/test-data');
