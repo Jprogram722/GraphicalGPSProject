@@ -4,11 +4,21 @@ from serial.tools import list_ports
 import serial
 
 def send_data() -> str:
-    arduinoCom: serial.Serial = serial.Serial('[arduino port]', 9600)
 
+    # connect to the arduino through the serial port with baud 9600
+    arduinoCom: serial.Serial = serial.Serial('COM3', 9600)
+
+    # read a line from the serial port
     arduino_str: str = arduinoCom.readline().decode('ascii')
+    # remove new line character
     arduino_str = arduino_str.replace("\n", "")
-    return arduino_str
+
+    lat_and_long = arduino_str.split(",")
+
+    for i in  range(len(lat_and_long)):
+        lat_and_long[i] = float(lat_and_long[i])
+
+    return lat_and_long
 
 
 def main() -> None:
@@ -18,6 +28,8 @@ def main() -> None:
     # prints each port to the console
     for port in ports:
         print(port)
+
+    # print(send_data())
 
 
 if __name__ == "__main__":

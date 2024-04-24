@@ -1,7 +1,8 @@
 (() => {
 
     const mainApp = async () => {
-        let map = L.map('map').setView([44.650627, -63.597140], 14);
+        let map = L.map('map');
+        map.setView([44.650627, -63.597140], 14)
         let centerMarker = null; // Define the marker variable
         
         // fetching sample data
@@ -9,6 +10,10 @@
             let res = await fetch('/api/test-data');
             let data = await res.json();
             console.log(data);
+            
+            if(data.status === "Success"){
+                map.setView([data.Latitude, data.Longitude], 14);
+            }
         }, 5000);
 
         // Define a custom icon using the 'user.png' image
