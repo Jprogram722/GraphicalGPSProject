@@ -10,11 +10,8 @@
 
     let map = L.map('map');
     map.setView([44.650627, -63.597140], 14)
-    let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }) // Add marker with custom icon;
-    let previousMaker = L.marker(map.getCenter(), {opacity: 0})
-
-    currentMarker.addTo(map);
-    previousMaker.addTo(map);
+    let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
+    let previousMaker = L.marker(map.getCenter());
 
     // fetching sample data
     setInterval(async () => {
