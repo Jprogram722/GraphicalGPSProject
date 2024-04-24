@@ -1,5 +1,8 @@
 # Python garbage
 __pycache__/
 
-# Ignore virtual enviroment files
+# Virtual enviroment files
 .venv/
+
+# NPM packages
+static/node_modules/
