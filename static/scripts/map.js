@@ -43,11 +43,9 @@
         if (previousLocation) {
             deltaLat = currentLocation.lat - previousLocation.lat;
             deltaLng = currentLocation.lng - previousLocation.lng;
+            currentBearing = Math.atan(deltaLng / deltaLat) * (180 / Math.PI)
             if (deltaLat < 0) {
-                currentBearing = 180 + (Math.atan(deltaLng / deltaLat) * (180 / Math.PI));
-            }
-            else {
-                currentBearing =  Math.atan(deltaLng / deltaLat) * (180 / Math.PI);
+                currentBearing += 180;
             }
         }
         previousLocation = map.getCenter();
