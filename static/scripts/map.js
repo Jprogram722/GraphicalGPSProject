@@ -1,17 +1,19 @@
 (async () => {
     let map = L.map('map').setView([44.650627, -63.597140], 14);
     let centerMarker = null; // Define the marker variable
+    let previousLocation = null;
+    let currentBearing = 90;
     
     // fetching sample data
-    setInterval(async () => {
-        let res = await fetch('/api/test-data');
-        let data = await res.json();
-        console.log(data);
-    }, 5000);
+    // setInterval(async () => {
+    //     let res = await fetch('/api/test-data');
+    //     let data = await res.json();
+    //     console.log(data);
+    // }, 5000);
 
     // Define a custom icon using the 'user.png' image
     const customIcon = L.icon({
-        iconUrl: '../static/user.png',
+        iconUrl: '../static/images/user.png',
         iconSize: [75, 75], 
         iconAnchor: [36, 60], 
         popupAnchor: [0, -16] 
@@ -28,13 +30,27 @@
 
     const updateCenterMarker = () => {
         if (centerMarker) {
-            centerMarker.setLatLng(map.getCenter()); // Update marker position to the new center
-        } else {
-            centerMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }) // Add marker with custom icon
-                .bindPopup('This is your current location')
-                .openPopup()
-                .addTo(map);
+            map.removeLayer(centerMarker);
+            centerMarker = null;
         }
+        // get bearing of current direction
+        currentLocation = map.getCenter();
+        if (previousLocation) {
+            deltaLat = currentLocation.lat - previousLocation.lat;
+            deltaLng = currentLocation.lng - previousLocation.lng;
+            if (deltaLat < 0) {
+                currentBearing = 180 + (Math.atan(deltaLng / deltaLat) * (180 / Math.PI));
+            }
+            else {
+                currentBearing =  Math.atan(deltaLng / deltaLat) * (180 / Math.PI);
+            }
+        }
+        previousLocation = map.getCenter();
+        // Add marker to map
+        centerMarker = L.marker(currentLocation, { icon: customIcon, autoPan: false, rotationAngle: currentBearing }) // Add marker with custom icon
+            .bindPopup('This is your current location')
+            .openPopup()
+            .addTo(map);
     };
 
     map.on('moveend', updateCenterMarker); // Listen for map move end event
