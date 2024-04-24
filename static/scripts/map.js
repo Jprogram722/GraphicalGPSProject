@@ -35,7 +35,7 @@
         .openPopup();
 
     const updateMarker = (corrdinates) => {
-        previousMaker.setLatLng(new L.LatLng(currentMarker.lat, currentMarker.lng));
+        previousMaker.setLatLng(new L.LatLng(currentMarker._latlng.lat, currentMarker._latlng.lng));
         currentMarker.setLatLng(new L.LatLng(corrdinates[0], corrdinates[1])); // Update marker position to the new center
 
         let deltaLat = currentMarker._latlng.lat - previousMaker._latlng.lat;
