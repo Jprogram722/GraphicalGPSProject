@@ -2,7 +2,6 @@
     let map = L.map('map');
     map.setView([44.650627, -63.597140], 14)
     let centerMarker = null; // Define the marker variable
-    
     // fetching sample data
     setInterval(async () => {
         let res = await fetch('/api/test-data');
