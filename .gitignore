@@ -5,4 +5,4 @@ __pycache__/
 .venv/
 
 # NPM packages
-static/node_modules/
+static/node_modules/*
