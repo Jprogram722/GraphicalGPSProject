@@ -1,6 +1,5 @@
 (async () => {
 
-    // Define a custom icon using the 'user.png' image
     const customIcon = L.icon({
         iconUrl: '../static/images/user.png',
         iconSize: [75, 75], 
@@ -32,14 +31,13 @@
     const updateMarker = () => {
         previousMaker.setLatLng(new L.LatLng(currentMarker._latlng.lat, currentMarker._latlng.lng));
         currentMarker.setLatLng(map.getCenter()); // Update marker position to the new center
-
+        // Calculate new bearing
         let deltaLat = currentMarker._latlng.lat - previousMaker._latlng.lat;
         let deltaLng = currentMarker._latlng.lng - previousMaker._latlng.lng;
         let currentBearing = Math.atan(deltaLng / deltaLat) * (180 / Math.PI);
         if (deltaLat < 0) {
             currentBearing += 180;
         }
-
         currentMarker.setRotationAngle(currentBearing);
     };
 
@@ -48,4 +46,5 @@
     setInterval(() => {
         map.invalidateSize(); // Refresh map size to ensure correct centering
     }, 1000);
+    
 })();
