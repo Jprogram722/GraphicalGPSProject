@@ -1,14 +1,14 @@
 (async () => {
 
     const customIcon = L.icon({
-        iconUrl: '../static/images/user.png',
+        iconUrl: '/static/images/user.png',
         iconSize: [75, 75], 
         iconAnchor: [36, 60], 
         popupAnchor: [0, -16] 
     });
 
     let map = L.map('map');
-    map.setView([44.650627, -63.597140], 14)
+    map.setView([44.650627, -63.597140], 16)
     let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
     let previousMaker = L.marker(map.getCenter());
 
@@ -19,10 +19,13 @@
         console.log(data);
     }, 5000);
 
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+    var layer = protomapsL.leafletLayer({url:'https://data.source.coop/protomaps/openstreetmap/tiles/v3.pmtiles', theme:'light'})
+    layer.addTo(map);
+
+    // L.tileLayer('../static/maps/{z}/{x}/{y}.png', {
+    //     maxZoom: 19,
+    //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    // }).addTo(map);
 
     const campusMarker = L.marker([44.66941024799195, -63.61346907985597]).addTo(map)
         .bindPopup('NSCC IT Campus')
