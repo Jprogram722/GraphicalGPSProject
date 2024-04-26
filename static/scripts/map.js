@@ -19,7 +19,7 @@
         console.log(data);
     }, 5000);
 
-    var layer = protomapsL.leafletLayer({url:'https://data.source.coop/protomaps/openstreetmap/tiles/v3.pmtiles', theme:'light'})
+    var layer = protomapsL.leafletLayer({url: `http://127.0.0.1:5000/api/maps/north_halifax.pmtiles`, theme:'light'})
     layer.addTo(map);
 
     // L.tileLayer('../static/maps/{z}/{x}/{y}.png', {
