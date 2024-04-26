@@ -9,25 +9,41 @@
     });
 
     let map = L.map('map');
+
+    // Set initial view and add current marker with custom icon
     map.setView([44.650627, -63.597140], 14)
     let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
     let previousMaker = L.marker(map.getCenter());
 
-    // fetching sample data
-    setInterval(async () => {
-        let res = await fetch('/api/test-data');
-        let data = await res.json();
-        console.log(data);
+    // popup icon for the user's locaiton
+    currentMarker.bindPopup('Your current location')
 
-        if(data.Status === "Success"){
-            map.setView([data.Latitude, data.Longitude], 14);
-            updateMarker([data.Latitude, data.Longitude]);
+    
+    // Fetching sample data
+    setInterval(async () => {
+        try {
+            let res = await fetch('/api/test-data');
+            let data = await res.json();
+            console.log(data);
+
+            if (data.Status === "Success") {
+                map.setView([data.Latitude, data.Longitude], 14);
+                updateMarker([data.Latitude, data.Longitude]);
+            }
+        // Error handling for fetching the data 
+        } catch (error) {
+            console.error('Error fetching data:', error);
         }
     }, 5000);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    
+    }).addTo(map);
+
+    L.grid({
+        redraw: 'moveend'
     }).addTo(map);
 
     const campusMarker = L.marker([44.66941024799195, -63.61346907985597]).addTo(map)
