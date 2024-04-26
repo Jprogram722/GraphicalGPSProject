@@ -13,6 +13,8 @@
   },
   "homepage": "https://github.com/Jprogram722/GraphicalGPSProject#readme",
   "dependencies": {
-    "leaflet-rotatedmarker": "^0.2.0"
+    "leaflet": "^1.9.4",
+    "leaflet-rotatedmarker": "^0.2.0",
+    "protomaps-leaflet": "^3.1.1"
   }
 }
