@@ -1,4 +1,6 @@
 let server = window.location;
+const locationDisplay = document.querySelector("#location h1");
+const compassDisplay = document.querySelector("#compass h1");
 
 (async () => {
 
@@ -24,6 +26,9 @@ let server = window.location;
             map.setView([data.Latitude, data.Longitude], 14);
             updateMarker([data.Latitude, data.Longitude]);
         }
+        // Map overlay
+        compassDisplay.innerHTML = "TEST"
+        locationDisplay.innerHTML = "TEST12345"
     }, 5000);
 
     var layer = protomapsL.leafletLayer({url: `${server}/api/maps/north_halifax.pmtiles`, theme:'light'});
