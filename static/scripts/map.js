@@ -16,7 +16,6 @@
     let map = L.map('map', { zoomControl: false });
 
     // this will create the map and set the view
-    let map = L.map('map');
     map.setView([44.650627, -63.597140], 16)
 
     // create 2 markers, one for the user, one for calculating angle
