@@ -5,6 +5,17 @@ import serial
 
 def send_data() -> str:
 
+    # gets the list of ports
+    ports = list_ports.comports()
+
+    # init a variable for the port the arduino is on
+    com_port: str = ""
+
+    # prints each port to the console
+    for port in ports:
+        if "Arduino" in port:
+            com_port = str(port.device)
+
     # connect to the arduino through the serial port with baud 9600
     arduinoCom: serial.Serial = serial.Serial('COM3', 9600)
 
@@ -27,7 +38,7 @@ def main() -> None:
 
     # prints each port to the console
     for port in ports:
-        print(port)
+        print(str(port))
 
     # print(send_data())
 
