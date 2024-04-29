@@ -2,8 +2,6 @@ from flask import Flask, render_template, jsonify, make_response, send_from_dire
 import serial.serialutil
 from helpers.getData import send_data
 import serial
-import os
-
 
 app = Flask(__name__)
 

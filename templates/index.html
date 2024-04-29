@@ -11,7 +11,14 @@
     <script src="{{ url_for('static', filename='node_modules/protomaps-leaflet/dist/protomaps-leaflet.min.js') }}"></script>
     <script src="{{ url_for('static', filename='node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js') }}"></script>
     <!-- MISC. NPM PACKAGES END HERE-->
-    <link rel="stylesheet" href="{{ url_for('static', filename='layouts/index_layout.css') }}" />
+    <style>
+        @font-face {
+            font-family: 'Noto Sans Bold';
+            src: url("{{ url_for('static', filename='fonts/NotoSans-Bold.tff') }}");
+        }
+    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/layouts.css') }}" />
     <title>GPS Map</title>
 </head>
 <body>
@@ -22,6 +29,14 @@
     </div>
     <!-- This div will hold the map -->
     <div id="map"></div>
+    <div id="overlay">
+        <div class="overlay-item" id="location">
+            <h1>[EMPTY]</h1>
+        </div>
+        <div class="overlay-item" id="compass">
+            <h1>[EMPTY]</h1>
+        </div>
+    </div>
     <script src="{{ url_for('static', filename='scripts/map.js' ) }}"></script>
 </body>
 </html>

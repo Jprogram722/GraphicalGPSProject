@@ -1,3 +1,7 @@
+let server = window.location;
+const locationDisplay = document.querySelector("#location h1");
+const compassDisplay = document.querySelector("#compass h1");
+
 (async () => {
 
     let server = window.location;
@@ -10,6 +14,7 @@
         popupAnchor: [0, -16] 
     });
 
+    let map = L.map('map', { zoomControl: false });
 
     // this will create the map and set the view
     let map = L.map('map');
@@ -29,6 +34,9 @@
             map.setView([data.Latitude, data.Longitude], 14);
             updateMarker([data.Latitude, data.Longitude, data.Bearing]);
         }
+        // Map overlay
+        compassDisplay.innerHTML = "TEST"
+        locationDisplay.innerHTML = "TEST12345"
     }, 5000);
 
     var layer = protomapsL.leafletLayer({url: `${server}/api/maps/north_halifax.pmtiles`, theme:'light'});
