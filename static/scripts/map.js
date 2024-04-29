@@ -1,10 +1,9 @@
-let server = window.location;
-const locationDisplay = document.querySelector("#location h1");
-const compassDisplay = document.querySelector("#compass h1");
-
 (async () => {
 
     let server = window.location;
+
+    const locationDisplay = document.querySelector("#location h1");
+    const compassDisplay = document.querySelector("#compass h1");
 
     // create the custom icon
     const customIcon = L.icon({
