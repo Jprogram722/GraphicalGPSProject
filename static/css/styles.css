@@ -1,0 +1,11 @@
+.overlay-item {
+    background-color: rgb(114, 47, 229);
+    border-radius: 15px;
+    margin-top: 20px;
+}
+
+.overlay-item h1 {
+    font-size: 3em;
+    color: white;
+    font-family: 'Noto Sans Bold', sans-serif;
+}

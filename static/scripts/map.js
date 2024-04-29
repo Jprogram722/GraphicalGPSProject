@@ -9,7 +9,7 @@ let server = window.location;
         popupAnchor: [0, -16] 
     });
 
-    let map = L.map('map');
+    let map = L.map('map', { zoomControl: false });
     map.setView([44.650627, -63.597140], 16)
     let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
     let previousMaker = L.marker(map.getCenter());
