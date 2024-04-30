@@ -1,13 +1,10 @@
 .overlay-item {
-    padding-left: 10px;
-    padding-right: 10px;
     background-color: rgba(131, 207, 255, 0.7);
     border-radius: 15px;
     margin-top: 20px;
 }
 
 .overlay-item h2 {
-    font-size: 1em;
     color: black;
     font-family: 'Noto Sans Bold', sans-serif;
 }
