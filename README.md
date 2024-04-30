@@ -16,7 +16,7 @@ In addition, you'll need a .PMTiles file placed within `static/maps` and an [OSR
 You can get the PMTiles CLI [here](https://github.com/protomaps/go-pmtiles) and find the basemaps [here](https://maps.protomaps.com/builds/).
 To download the basemaps for Nova Scotia run
 ```
-pmtiles extract [CURRENT BASEMAP] nova_scotia.pmtiles --bbox=-66.456299,43.371009,-59.639282,47.073875
+pmtiles extract [LATEST BASEMAP] nova_scotia.pmtiles --bbox=-66.456299,43.371009,-59.639282,47.073875
 ```
 
 For routing data, you'll need an OpenStreetMap data extract. See [Geofabrik](http://download.geofabrik.de/) for regional extracts.
