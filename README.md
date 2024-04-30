@@ -4,6 +4,8 @@ A GPS web application meant to run on a Raspberry Pi. Draws a map, gets your loc
 
 ## Requirements/Installation
 
+A Python virtual environment is recommended.
+
 Install the Python dependencies within `requirements.txt` and the Node packages listed within `static/package.json`:
 ```
 pip install -r requirements.txt
