@@ -14,6 +14,17 @@ let server = window.location;
     let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
     let previousMaker = L.marker(map.getCenter());
 
+    // basic route nonsense
+    L.Routing.control({
+        waypoints: [
+          L.latLng(44.6697021161829, -63.6133868698228),
+          L.latLng(44.66436078522418, -63.60027573010271)
+        ],
+        // FIXME: currently only detects a server running under localhost:5500
+        serviceUrl: 'http://localhost:5500/route/v1',
+        position: 'bottomright'
+    }).addTo(map);
+
     // fetching sample data
     setInterval(async () => {
         let res = await fetch('/api/test-data');
@@ -21,7 +32,7 @@ let server = window.location;
         console.log(data);
     }, 5000);
 
-    var layer = protomapsL.leafletLayer({url: `${server}/api/maps/north_halifax.pmtiles`, theme:'light'});
+    var layer = protomapsL.leafletLayer({url: `${server}api/maps/north_halifax.pmtiles`, theme:'light'});
     layer.addTo(map);
 
     // L.tileLayer('../static/maps/{z}/{x}/{y}.png', {

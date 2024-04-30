@@ -6,3 +6,7 @@ __pycache__/
 
 # NPM packages
 static/node_modules/*
+
+# PMTiles/OSRM
+static/maps/*
+static/osrm/*
