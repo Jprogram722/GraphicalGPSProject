@@ -18,7 +18,7 @@ SoftwareSerial mySerial(TX_pin, RX_pin);
 // const int accelerometer_addr = 0x68;
 
 // set up a connection to the icd monitor (addr, cols, rows)
-LiquidCrystal_I2C lcd(0x3F, 16, 2);
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 // create a Tiny GPS Object
 TinyGPSPlus gps;
@@ -46,9 +46,8 @@ void setup()
 
   // start the lcd screens
   
-  // lcd.init();
-  // lcd.backlight();
-  // lcd.print("Getting GPS Data");
+  lcd.init();
+  lcd.backlight();
 
   // start the Accelormeter
   // docs: https://invensense.tdk.com/wp-content/uploads/2015/02/MPU-6000-Register-Map1.pdf
@@ -89,6 +88,20 @@ void loop()
     // parse the data from the gps
 		gps.encode(raw_data);
 
+    // compass.read();
+    // angle = compass.getAzimuth() + 42;
+
+    // if(angle < 0){
+    //   angle = angle + 360;
+    // }
+
+    // lcd.clear();
+    // lcd.setCursor(0, 0);
+    // lcd.print("Azimuth = ");
+    // lcd.print(angle);
+    // delay(1000);
+    
+
     // print raw data
     // Serial.print(temp);
     // lat: 44.650627 lng: -63.597140
@@ -118,13 +131,14 @@ void loop()
     // Serial.println(GyZ);
 
     // checks to see if the location has updated
+
     if(gps.location.isUpdated()){
       // print the latitude and longitude
 
       latitude = gps.location.lat();
       longitude = gps.location.lng();
       compass.read();
-      angle = compass.getAzimuth() + 32;
+      angle = compass.getAzimuth() + 42;
 
       if(angle < 0){
         angle = angle + 360;
@@ -135,15 +149,6 @@ void loop()
       Serial.print(longitude, 5);
       Serial.print(",");
       Serial.println(angle);
-
-      // lcd.clear();
-      // lcd.setCursor(0, 0);
-      // lcd.print("Latitude = ");
-      // lcd.println(latitude);
-      // lcd.setCursor(0, 1);
-      // lcd.print("Longitude = ");
-      // lcd.println(longitude);
-
     }
 	}
 } 

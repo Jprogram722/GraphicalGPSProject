@@ -22,19 +22,14 @@
     <title>GPS Map</title>
 </head>
 <body>
-    <!-- this div will hold the overlay -->
-    <div id="overlay">
-        <p>Your current location:</p>
-        <p id="coordinates"></p>
-    </div>
     <!-- This div will hold the map -->
     <div id="map"></div>
     <div id="overlay">
         <div class="overlay-item" id="location">
-            <h1>[EMPTY]</h1>
+            <h2 id="coordinates"></h2>
         </div>
         <div class="overlay-item" id="compass">
-            <h1>[EMPTY]</h1>
+            <h2 id="direction"></h2>
         </div>
     </div>
     <script src="{{ url_for('static', filename='scripts/map.js' ) }}"></script>

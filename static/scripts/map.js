@@ -2,8 +2,11 @@
 
     let server = window.location;
 
-    const locationDisplay = document.querySelector("#location h1");
-    const compassDisplay = document.querySelector("#compass h1");
+        const coordinatesTag = document.querySelector("#coordinates");
+        const direction = document.querySelector("#direction");
+
+        coordinatesTag.textContent = "Loading";
+        direction.textContent = "Loading";
 
     // create the custom icon
     const customIcon = L.icon({
@@ -32,9 +35,6 @@
             map.setView([data.Latitude, data.Longitude], 14);
             updateMarker([data.Latitude, data.Longitude, data.Bearing]);
         }
-        // Map overlay
-        compassDisplay.innerHTML = "TEST"
-        locationDisplay.innerHTML = "TEST12345"
     }, 5000);
 
     var layer = protomapsL.leafletLayer({url: `${server}/api/maps/north_halifax.pmtiles`, theme:'light'});
@@ -58,24 +58,47 @@
         
         // Update marker position to the new center
         currentMarker.setLatLng(new L.LatLng(coordinates[0], coordinates[1]));
-        updateOverlay();
+        updateOverlay(coordinates[2]);
 
         // Calculate new bearing
         /*
             angle = arctan(y_f - y_i / x_f - x_i)
         */
-        let deltaLat = currentMarker._latlng.lat - previousMaker._latlng.lat;
-        let deltaLng = currentMarker._latlng.lng - previousMaker._latlng.lng;
-        let currentBearing = Math.atan(deltaLng / deltaLat) * (180 / Math.PI);
-        if (deltaLat < 0) {
-            currentBearing += 180;
-        }
+        // let deltaLat = currentMarker._latlng.lat - previousMaker._latlng.lat;
+        // let deltaLng = currentMarker._latlng.lng - previousMaker._latlng.lng;
+        // let currentBearing = Math.atan(deltaLng / deltaLat) * (180 / Math.PI);
+        // if (deltaLat < 0) {
+        //     currentBearing += 180;
+        // }
         currentMarker.setRotationAngle(coordinates[2]);
     };
 
-    const updateOverlay = () => {
-        let coordinatesTag = document.querySelector("#coordinates");
+    const updateOverlay = (bearing) => {
         coordinatesTag.textContent = `Latitude: ${currentMarker._latlng.lat}, Longitude: ${currentMarker._latlng.lng}`;
+        if(bearing > 345 || bearing <= 30){
+            direction.textContent = "N";
+        }
+        else if (bearing > 30 && bearing < 75){
+            direction.textContent = "NE";
+        }
+        else if (bearing >= 75 && bearing <= 120){
+            direction.textContent = "E";
+        }
+        else if (bearing > 120 && bearing < 165){
+            direction.textContent = "SE";
+        }
+        else if (bearing >= 165 && bearing <= 210){
+            direction.textContent = "S";
+        }
+        else if (bearing > 210 && bearing < 255){
+            direction.textContent = "SW";
+        }
+        else if (bearing >= 255 && bearing <= 300){
+            direction.textContent = "W";
+        }
+        else if (bearing > 300 && bearing < 345){
+            direction.textContent = "NW";
+        }
     }
 
     setInterval(() => {
