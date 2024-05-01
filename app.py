@@ -1,15 +1,9 @@
 from flask import Flask, render_template, jsonify, make_response, send_from_directory
-import webview
-import sys
-import threading
 import serial.serialutil
 from helpers.getData import send_data
 import serial
 
 app = Flask(__name__)
-
-def runServer():
-    app.run()
 
 @app.route("/")
 def index():
@@ -31,12 +25,4 @@ def getMap(filename):
     return response
 
 if __name__ == '__main__':
-    # Run Flask server on a seperate thread
-    t = threading.Thread(target=runServer)
-    t.daemon = True
-    t.start()
-
-    window = webview.create_window("GPS App", "http://localhost:5000", fullscreen=True)
-    webview.start(debug=True)
-    # Can everything on webview close
-    sys.exit()
+    app.run()
