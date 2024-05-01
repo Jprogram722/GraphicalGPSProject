@@ -35,5 +35,4 @@ docker run -t -i -p 5500:5500 -v ${PWD}:/data kradenko/osrm-backend:arm64 osrm-r
 ```
 
 ## Running
-
-After all that, run `flask run` within root to start the GPS at `localhost:5000`
+After all this is done, simply run the python script from your virtual environment.
