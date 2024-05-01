@@ -32,7 +32,7 @@ let server = window.location;
         console.log(data);
     }, 5000);
 
-    var layer = protomapsL.leafletLayer({url: `${server}api/maps/north_halifax.pmtiles`, theme:'light'});
+    var layer = protomapsL.leafletLayer({url: `${server}api/maps/nova_scotia.pmtiles`, theme:'light'});
     layer.addTo(map);
 
     // L.tileLayer('../static/maps/{z}/{x}/{y}.png', {
