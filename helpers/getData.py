@@ -11,10 +11,10 @@ def get_port() -> str:
     for port in ports:
         print(str(port))
 
-def send_data_arduino() -> dict:
+def send_data() -> dict:
 
     # connect to the arduino through the serial port with baud 9600
-    arduinoCom: serial.Serial = serial.Serial('/dev/serial0', 9600)
+    arduinoCom: serial.Serial = serial.Serial('COM3', 9600)
 
     # read a line from the serial port
     arduino_str: str = arduinoCom.readline().decode('utf-8')
@@ -28,38 +28,9 @@ def send_data_arduino() -> dict:
 
     return data_obj
 
-def parse_data_pi():
-    piCom = serial.Serial('/dev/serial0', 9600)
-    while True:
-        
-        latitude_degrees = longitude_degrees = 0
-
-        pi_str = piCom.readline().decode('utf-8')
-        pi_str = pi_str.replace("\n", "")
-
-        pi_array = pi_str.split(",")
-        if (pi_array[0] == "$GPGGA"):
-
-            time = pi_array[1]
-            latitude_mag = pi_array[2]
-            latitude_dir = pi_array[3]
-            longitude_mag = pi_array[4]
-            longitude_dir = pi_array[5]
-            
-            if(latitude_mag != "" and longitude_mag != ""):
-                latitude_degrees = float(latitude_mag[:2]) + (float(latitude_mag[2:]) / 60)
-                if(latitude_dir == "S"):
-                    latitude_degrees *= -1
-                longitude_degrees = float(longitude_mag[:3]) + (float(longitude_mag[3:]) / 60)
-                if(longitude_dir == "W"):
-                    longitude_degrees *= -1
-
-            return {"Latitude": latitude_degrees, "Longitude": longitude_degrees, "Bearing": None}
-
-
 
 def main() -> None:
-    print(parse_data_pi())
+    print(send_data())
 
 
 

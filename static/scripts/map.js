@@ -16,14 +16,11 @@
 
     const rotateMarker = (bearing) => {
         currentMarker.setRotationAngle(bearing);
-        updateBearingOverlay(bearing);
+        updateOverlay(bearing);
     }
 
-    const updateLatLongOverlay = () => {
-	    coordinatesTag.textContent = `Latitude: ${currentMarker._latlng.lat}, Longitude: ${currentMarker._latlng.lng}`;
-    }
-
-    const updateBearingOverlay = (bearing) => {
+    const updateOverlay = (bearing) => {
+        coordinatesTag.textContent = `Latitude: ${currentMarker._latlng.lat}, Longitude: ${currentMarker._latlng.lng}`;
         if(bearing > 345 || bearing <= 30){
             direction.textContent = "N";
         }
@@ -147,7 +144,6 @@
             if(data.Longitude && data.Latitude){
                 map.setView([data.Latitude, data.Longitude], 14);
                 updateMarker([data.Latitude, data.Longitude, data.Bearing]);
-		updateLatLongOverlay(null);
             }
     
             if(data.Bearing){

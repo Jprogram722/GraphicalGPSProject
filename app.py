@@ -1,9 +1,7 @@
 from flask import Flask, render_template, jsonify, make_response, send_from_directory
 import serial.serialutil
-from helpers.getData import send_data_arduino, parse_data_pi
+from helpers.getData import send_data
 import serial
-
-global data_gps
 
 app = Flask(__name__)
 
@@ -14,7 +12,7 @@ def index():
 @app.route("/api/get-data")
 def getArduinoData():
     try:
-        data = parse_data_pi()
+        data = send_data()
         data["Status"] = "Success"
 
         return jsonify(data)
