@@ -24,3 +24,6 @@ def getMap(filename):
     response = make_response(send_from_directory('static/maps', filename))
     response.accept_ranges = 'bytes'
     return response
+
+if __name__ == '__main__':
+    app.run()

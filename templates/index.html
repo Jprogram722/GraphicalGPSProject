@@ -3,18 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- MAPBOX FILES BEGIN HERE -->
+    <!-- LEAFLET FILES BEGIN HERE -->
     <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/leaflet/dist/leaflet.css') }}" />
     <script src="{{ url_for('static', filename='node_modules/leaflet/dist/leaflet.js') }}"></script>
-    <!-- MAPBOX FILES END HERE -->
-    <!-- MISC. NPM PACKAGES START HERE-->
+    <!-- LEAFLET FILES END -->
+    <!-- LEAFLET ROUTING MACHINE BEGIN -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css') }}" />
+    <script src="{{ url_for('static', filename='node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.js') }}"></script>
+    <!-- LEAFLET ROUTING MACHINE END -->
+    <!-- MISC. NPM PACKAGES BEGIN -->
     <script src="{{ url_for('static', filename='node_modules/protomaps-leaflet/dist/protomaps-leaflet.min.js') }}"></script>
     <script src="{{ url_for('static', filename='node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js') }}"></script>
-    <!-- MISC. NPM PACKAGES END HERE-->
+    <!-- MISC. NPM PACKAGES END -->
     <style>
         @font-face {
             font-family: 'Noto Sans Bold';
-            src: url("{{ url_for('static', filename='fonts/NotoSans-Bold.tff') }}");
+            src: url("{{ url_for('static', filename='fonts/NotoSans-Bold.ttf') }}");
         }
     </style>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
