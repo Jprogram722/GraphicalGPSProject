@@ -9,12 +9,13 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route("/api/test-data")
-def getTestData():
+@app.route("/api/get-data")
+def getArduinoData():
     try:
         data = send_data()
-        print(data)
-        return jsonify({"Latitude": data[0], "Longitude": data[1], "Bearing": data[2],"Status": "Success"})
+        data["Status"] = "Success"
+
+        return jsonify(data)
     except serial.serialutil.SerialException:
         return jsonify({"Latitude": None, "Longitude": None, "Bearing": None, "Status": "Failed"})
     

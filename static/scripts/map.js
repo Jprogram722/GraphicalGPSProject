@@ -1,5 +1,69 @@
 (async () => {
 
+    /**
+     * This function will update the coordinates for the user marker.
+     * it will also use the old and new coordinates to calculate the bearing for the rotation angle
+     * and apply the rotation to the user marker.
+     * @param {Array} coordinates 
+     */
+    const updateMarker = (coordinates) => {
+        // store the coordinates before updating
+        previousMaker.setLatLng(new L.LatLng(currentMarker._latlng.lat, currentMarker._latlng.lng));
+        
+        // Update marker position to the new center
+        currentMarker.setLatLng(new L.LatLng(coordinates[0], coordinates[1]));
+    };
+
+    const rotateMarker = (bearing) => {
+        currentMarker.setRotationAngle(bearing);
+        updateOverlay(bearing);
+    }
+
+    const updateOverlay = (bearing) => {
+        coordinatesTag.textContent = `Latitude: ${currentMarker._latlng.lat}, Longitude: ${currentMarker._latlng.lng}`;
+        if(bearing > 345 || bearing <= 30){
+            direction.textContent = "N";
+        }
+        else if (bearing > 30 && bearing < 75){
+            direction.textContent = "NE";
+        }
+        else if (bearing >= 75 && bearing <= 120){
+            direction.textContent = "E";
+        }
+        else if (bearing > 120 && bearing < 165){
+            direction.textContent = "SE";
+        }
+        else if (bearing >= 165 && bearing <= 210){
+            direction.textContent = "S";
+        }
+        else if (bearing > 210 && bearing < 255){
+            direction.textContent = "SW";
+        }
+        else if (bearing >= 255 && bearing <= 300){
+            direction.textContent = "W";
+        }
+        else if (bearing > 300 && bearing < 345){
+            direction.textContent = "NW";
+        }
+    }
+
+    const updateRoute = () => {
+        if (routeStart._container.value != -1 && routeEnd._container.value != -1) {
+            var start = locations[routeStart._container.value];
+            var end = locations[routeEnd._container.value];
+            // program craps itself if start + destination are the same
+            waypoints = [
+                L.latLng(start.lat, start.lng),
+                L.latLng(end.lat, end.lng)
+            ];
+            if (waypoints[0].lat !== waypoints[1].lat || waypoints[0].lng !== waypoints[1].lng) {
+                mapRouting.setWaypoints(waypoints);
+                mapRouting.route();
+            }
+        }
+    }
+
+    // gets the local address
     let server = window.location;
 
     const coordinatesTag = document.querySelector("#coordinates");
@@ -16,6 +80,7 @@
         popupAnchor: [0, -16] 
     });
 
+    // create the route select list
     L.Control.Dropdown = L.Control.extend({
         onAdd: map => {
             var selectList = L.DomUtil.create("select");
@@ -47,113 +112,50 @@
         return new L.Control.Dropdown(opts);
     }
 
-    function updateRoute() {
-        if (routeStart._container.value != -1 && routeEnd._container.value != -1) {
-            var start = locations[routeStart._container.value];
-            var end = locations[routeEnd._container.value];
-            // program craps itself if start + destination are the same
-            waypoints = [
-                L.latLng(start.lat, start.lng),
-                L.latLng(end.lat, end.lng)
-            ];
-            if (waypoints[0].lat !== waypoints[1].lat || waypoints[0].lng !== waypoints[1].lng) {
-                mapRouting.setWaypoints(waypoints);
-                mapRouting.route();
-            }
-        }
-    }
-    
     let map = L.map('map', { zoomControl: false });
 
     // this will create the map and set the view
-    map.setView([44.650627, -63.597140], 16);
+    map.setView([44.650627, -63.597140], 16)
 
     // create 2 markers, one for the user, one for calculating angle
     let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
     let previousMaker = L.marker(map.getCenter());
 
-    // basic route nonsense
+    // create the routing functionality
     const mapRouting =  L.Routing.control({
         // FIXME: currently only detects a server running under localhost:5500
         serviceUrl: 'http://localhost:5500/route/v1',
         fitSelectedRoutes: false,
         position: 'bottomright'
     }).addTo(map);
-
-    // add our new custom element
     var routeEnd = L.control.dropdown({ position: 'bottomright' }).addTo(map);
     var routeStart = L.control.dropdown({ position: 'bottomright' }).addTo(map);
 
     // fetching arduino data
-    setInterval(async () => {
-        let res = await fetch('/api/test-data');
-        let data = await res.json();
-        console.log(data);
-
-        if(data.Status === "Success"){
-            map.setView([data.Latitude, data.Longitude], 14);
-            updateMarker([data.Latitude, data.Longitude, data.Bearing]);
+    (async function getData() {
+        try{
+            let res = await fetch('/api/get-data');
+            let data = await res.json();
+            console.log(data);
+    
+            if(data.Longitude && data.Latitude){
+                map.setView([data.Latitude, data.Longitude], 14);
+                updateMarker([data.Latitude, data.Longitude, data.Bearing]);
+            }
+    
+            if(data.Bearing){
+                rotateMarker(data.Bearing);
+            }  
         }
-    }, 5000);
+        catch(err){
+            console.log("Couldn't get data")
+        }
 
-    var layer = protomapsL.leafletLayer({url: `${server}api/maps/nova_scotia.pmtiles`, theme:'light'});
+        setTimeout(getData, 2000);
+    })();
+
+    var layer = protomapsL.leafletLayer({url: `${server}/api/maps/nova_scotia.pmtiles`, theme:'light'});
     layer.addTo(map);
-
-    /**
-     * This function will update the coordinates for the user marker.
-     * it will also use the old and new coordinates to calculate the bearing for the rotation angle
-     * and apply the rotation to the user marker.
-     * @param {Array} coordinates 
-     */
-    const updateMarker = (coordinates) => {
-
-        // store the coordinates before updating
-        previousMaker.setLatLng(new L.LatLng(currentMarker._latlng.lat, currentMarker._latlng.lng));
-        
-        // Update marker position to the new center
-        currentMarker.setLatLng(new L.LatLng(coordinates[0], coordinates[1]));
-        updateOverlay(coordinates[2]);
-
-        // Calculate new bearing
-        /*
-            angle = arctan(y_f - y_i / x_f - x_i)
-        */
-        // let deltaLat = currentMarker._latlng.lat - previousMaker._latlng.lat;
-        // let deltaLng = currentMarker._latlng.lng - previousMaker._latlng.lng;
-        // let currentBearing = Math.atan(deltaLng / deltaLat) * (180 / Math.PI);
-        // if (deltaLat < 0) {
-        //     currentBearing += 180;
-        // }
-        currentMarker.setRotationAngle(coordinates[2]);
-    };
-
-    const updateOverlay = (bearing) => {
-        coordinatesTag.textContent = `Latitude: ${currentMarker._latlng.lat}, Longitude: ${currentMarker._latlng.lng}`;
-        if(bearing > 345 || bearing <= 30){
-            direction.textContent = "N";
-        }
-        else if (bearing > 30 && bearing < 75){
-            direction.textContent = "NE";
-        }
-        else if (bearing >= 75 && bearing <= 120){
-            direction.textContent = "E";
-        }
-        else if (bearing > 120 && bearing < 165){
-            direction.textContent = "SE";
-        }
-        else if (bearing >= 165 && bearing <= 210){
-            direction.textContent = "S";
-        }
-        else if (bearing > 210 && bearing < 255){
-            direction.textContent = "SW";
-        }
-        else if (bearing >= 255 && bearing <= 300){
-            direction.textContent = "W";
-        }
-        else if (bearing > 300 && bearing < 345){
-            direction.textContent = "NW";
-        }
-    }
 
     setInterval(() => {
         map.invalidateSize(); // Refresh map size to ensure correct centering
