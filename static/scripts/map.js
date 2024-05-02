@@ -116,6 +116,7 @@
 
     // this will create the map and set the view
     map.setView([44.650627, -63.597140], 16)
+    // 
 
     // create 2 markers, one for the user, one for calculating angle
     let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
@@ -126,6 +127,8 @@
         // FIXME: currently only detects a server running under localhost:5500
         serviceUrl: 'http://localhost:5500/route/v1',
         fitSelectedRoutes: false,
+        draggableWaypoints: false,
+        addWaypoints: false,
         position: 'bottomright'
     }).addTo(map);
     var routeEnd = L.control.dropdown({ position: 'bottomright' }).addTo(map);
