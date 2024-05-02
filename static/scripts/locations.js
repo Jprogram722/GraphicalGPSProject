@@ -23,5 +23,20 @@ var locations = [
         "name": "Scotiabank Theatre Halifax",
         "lat": "44.64959057496531",
         "lng": "-63.67134104919394"
+    },
+    {
+        "name": "Canada Computers & Electronics",
+        "lat": "44.65068989058643",
+        "lng": "-63.67598330794379"
+    },
+    {
+        "name": "Costco Wholesale Halifax",
+        "lat": "44.65693752831631",
+        "lng": "-63.67565157225673"
+    },
+    {
+        "name": "IKEA Halifax",
+        "lat": "44.713047313071925",
+        "lng": "-63.557863216107116"
     }
 ];
