@@ -57,6 +57,10 @@
                 L.latLng(end.lat, end.lng)
             ];
             if (waypoints[0].lat !== waypoints[1].lat || waypoints[0].lng !== waypoints[1].lng) {
+                // if latitude + longitude are both empty, point to currentMarker's coordinates
+                if (start.lat === "" && start.lng === "") {
+                    waypoints[0] = currentMarker.getLatLng();
+                }
                 mapRouting.setWaypoints(waypoints);
                 mapRouting.route();
             }

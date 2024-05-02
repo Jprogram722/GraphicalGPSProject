@@ -1,5 +1,10 @@
 var locations = [
     {
+        "name": "Current Location",
+        "lat": "",
+        "lng": ""
+    },
+    {
         "name": "NSCC Institute of Technology",
         "lat": "44.66921496139025",
         "lng": "-63.61343893200053"
