@@ -7,6 +7,7 @@
      * @param {Array} coordinates 
      */
     const updateMarker = (coordinates) => {
+
         // store the coordinates before updating
         previousMaker.setLatLng(new L.LatLng(currentMarker._latlng.lat, currentMarker._latlng.lng));
         
@@ -16,11 +17,14 @@
 
     const rotateMarker = (bearing) => {
         currentMarker.setRotationAngle(bearing);
-        updateOverlay(bearing);
+        updateBearingOverlay(bearing);
     }
 
-    const updateOverlay = (bearing) => {
-        coordinatesTag.textContent = `Latitude: ${currentMarker._latlng.lat}, Longitude: ${currentMarker._latlng.lng}`;
+    const updateLatLongOverlay = () => {
+	    coordinatesTag.textContent = `Latitude: ${currentMarker._latlng.lat}, Longitude: ${currentMarker._latlng.lng}`;
+    }
+
+    const updateBearingOverlay = (bearing) => {
         if(bearing > 345 || bearing <= 30){
             direction.textContent = "N";
         }
@@ -120,7 +124,6 @@
 
     // this will create the map and set the view
     map.setView([44.650627, -63.597140], 16)
-    // 
 
     // create 2 markers, one for the user, one for calculating angle
     let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
@@ -148,6 +151,7 @@
             if(data.Longitude && data.Latitude){
                 map.setView([data.Latitude, data.Longitude], 14);
                 updateMarker([data.Latitude, data.Longitude, data.Bearing]);
+		        updateLatLongOverlay();
             }
     
             if(data.Bearing){
