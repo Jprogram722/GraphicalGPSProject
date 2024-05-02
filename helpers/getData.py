@@ -3,36 +3,7 @@
 from serial.tools import list_ports
 import serial
 
-def send_data() -> str:
-
-    # gets the list of ports
-    ports = list_ports.comports()
-
-    # init a variable for the port the arduino is on
-    com_port: str = ""
-
-    # prints each port to the console
-    for port in ports:
-        if "Arduino" in port:
-            com_port = str(port.device)
-
-    # connect to the arduino through the serial port with baud 9600
-    arduinoCom: serial.Serial = serial.Serial('COM3', 9600)
-
-    # read a line from the serial port
-    arduino_str: str = arduinoCom.readline().decode('ascii')
-    # remove new line character
-    arduino_str = arduino_str.replace("\n", "")
-
-    lat_and_long = arduino_str.split(",")
-
-    for i in  range(len(lat_and_long)):
-        lat_and_long[i] = float(lat_and_long[i])
-
-    return lat_and_long
-
-
-def main() -> None:
+def get_port() -> str:
     # gets the list of ports
     ports = list_ports.comports()
 
@@ -40,7 +11,28 @@ def main() -> None:
     for port in ports:
         print(str(port))
 
-    # print(send_data())
+def send_data() -> dict:
+
+    # connect to the arduino through the serial port with baud 9600
+    arduinoCom: serial.Serial = serial.Serial('COM3', 9600)
+
+    # read a line from the serial port
+    arduino_str: str = arduinoCom.readline().decode('utf-8')
+
+    # remove new line character
+    arduino_str = arduino_str.replace("\n", "")
+
+    data = arduino_str.split(",")
+
+    data_obj = {"Latitude": float(data[0]), "Longitude": float(data[1]), "Bearing": int(data[2])}
+
+    return data_obj
+
+
+def main() -> None:
+    print(send_data())
+
+
 
 
 if __name__ == "__main__":
