@@ -8,3 +8,15 @@
     color: black;
     font-family: 'Noto Sans Bold', sans-serif;
 }
+
+.leaflet-location-select {
+    width: 320px;
+    height: 35px;
+    background-color: rgb(255, 255, 255);
+    border: 2px solid rgba(0,0,0,0.2);
+    background-clip: padding-box;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: medium;
+    text-align: center;
+}
