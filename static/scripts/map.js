@@ -144,7 +144,7 @@
             console.log(data);
     
             if(data.Longitude && data.Latitude){
-                map.setView([data.Latitude, data.Longitude], 14);
+                map.panTo([data.Latitude, data.Longitude]);
                 updateMarker([data.Latitude, data.Longitude, data.Bearing]);
 		        updateLatLongOverlay();
             }
