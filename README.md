@@ -4,12 +4,18 @@ A GPS web application meant to run on a Raspberry Pi. Draws a map, gets your loc
 
 ## Requirements/Installation
 
-Create a python virtual environment. If you want the routing functionality, you'll also need Docker Engine later on in this guide.
+Create a python virtual environment. 
+```
+python -m venv .venv
+source .venv/bin/activate
+```
+If you want the routing functionality, you'll also need Docker Engine later on in this guide.
 Install the Python dependencies within `requirements.txt` and the Node packages listed within `static/package.json`:
 ```
 pip install -r requirements.txt
 cd static/
 npm install
+cd ..
 ```
 
 ### PMTiles
