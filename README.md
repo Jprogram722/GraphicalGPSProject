@@ -17,17 +17,22 @@ npm install
 
 The .PMTiles file makes up the images that comprise the map. The pictures of the roads, buildings, etc. are all stored within a .pmtiles archive. Our JavaScript file requests the Flask server for a specific file in the archive so that it can render it on the map.
 
-To get a PMTiles file for a specific region, [download the command line tool here.](https://github.com/protomaps/go-pmtiles/releases/latest) You'll also need a link to the [latest basemap here](https://maps.protomaps.com/builds/) (right click download > copy link)
+To get a PMTiles file for a specific region, [download the command line tool here.](https://github.com/protomaps/go-pmtiles/) You'll also need a link to the [latest basemap here](https://maps.protomaps.com/builds/) (right click download > copy link)
 
-Once you have both of those things, you can run the executable within a terminal window. For example, to extract a .pmtiles archive for only Nova Scotia, run the following:
+Once you have both of those things, you can use the `extract` command to get a specific region from the full basemap. Pass in a lat/lng bounding box with the `--bbox` parameter, encompassing the whole area you need your GPS to navigate. [bbox finder](http://bboxfinder.com) is a good way to automatically generate a boundary box for your needs.
+
+As an example, this is what generating a .pmtiles file would look like for the entirety of Nova Scotia:
 ```
-pmtiles extract [LATEST BASEMAP] nova_scotia.pmtiles --bbox=-66.456299,43.371009,-59.639282,47.073875
+pmtiles extract [LATEST BASEMAP] nova_scotia.pmtiles --bbox=-66.45,43.37,-59.63,47.07
 ```
 
 Place inside `static/maps` once you have your result.
 
 ### Routing
-Download a regional data extract for your region, for example at [Geofabrik](http://download.geofabrik.de/). The `osm.pbf` file is what you want.
+
+While PMTiles is great for map pictures, it doesn't actually contain any data regarding street or building names that we can easily navigate. We need a folder of `osrm.*` files to get that information, which we can then pass to our server to get a route between two points.
+
+To start, you need an `osm.pbf` file. Download a regional data extract for your region, for example at [Geofabrik](http://download.geofabrik.de/).
 
 Unpack the data into `osrm.*` files with the `osrm/osrm-backend` docker images before running the server. You'll need the Docker Engine for this.
 **IF YOU'RE ON AN ARM64 DEVICE (E.G. Raspberry Pi) REPLACE EVERY `osrm/osrm-backend` WITH [`kradenko/osrm-backend:arm64`](https://hub.docker.com/r/kradenko/osrm-backend):**
