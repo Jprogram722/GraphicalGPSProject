@@ -54,19 +54,14 @@ let map = L.map('map', { zoomControl: false });
     }
 
     const updateRoute = () => {
-        if (routeStart._container.value != -1 && routeEnd._container.value != -1) {
-            var start = locations[routeStart._container.value];
+        if (routeEnd._container.value != -1) {
             var end = locations[routeEnd._container.value];
             // program craps itself if start + destination are the same
             waypoints = [
-                L.latLng(start.lat, start.lng),
+                currentMarker.getLatLng(),
                 L.latLng(end.lat, end.lng)
             ];
             if (waypoints[0].lat !== waypoints[1].lat || waypoints[0].lng !== waypoints[1].lng) {
-                // if latitude + longitude are both empty, point to currentMarker's coordinates
-                if (start.lat === "" && start.lng === "") {
-                    waypoints[0] = currentMarker.getLatLng();
-                }
                 mapRouting.setWaypoints(waypoints);
                 mapRouting.route();
             }
@@ -94,6 +89,7 @@ let map = L.map('map', { zoomControl: false });
     L.Control.Dropdown = L.Control.extend({
         onAdd: map => {
             var selectList = L.DomUtil.create("select");
+            selectList.classList.add("leaflet-location-select")
 
             defaultText = L.DomUtil.create("option");
             defaultText.text = "Select a destination";
@@ -139,7 +135,6 @@ let map = L.map('map', { zoomControl: false });
         position: 'bottomright'
     }).addTo(map);
     var routeEnd = L.control.dropdown({ position: 'bottomright' }).addTo(map);
-    var routeStart = L.control.dropdown({ position: 'bottomright' }).addTo(map);
 
     // fetching arduino data
     (async function getData() {
@@ -149,7 +144,7 @@ let map = L.map('map', { zoomControl: false });
             console.log(data);
     
             if(data.Longitude && data.Latitude){
-                map.setView([data.Latitude, data.Longitude], 14);
+                map.panTo([data.Latitude, data.Longitude]);
                 updateMarker([data.Latitude, data.Longitude, data.Bearing]);
 		        updateLatLongOverlay();
             }
