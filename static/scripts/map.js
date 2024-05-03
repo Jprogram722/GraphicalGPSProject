@@ -1,3 +1,5 @@
+let map = L.map('map', { zoomControl: false });
+
 (async () => {
 
     /**
@@ -119,8 +121,6 @@
     L.control.dropdown = function(opts) {
         return new L.Control.Dropdown(opts);
     }
-
-    let map = L.map('map', { zoomControl: false });
 
     // this will create the map and set the view
     map.setView([44.650627, -63.597140], 16)

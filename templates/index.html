@@ -3,29 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="//code.jquery.com/jquery.min.js"></script>
+
     <!-- LEAFLET FILES BEGIN HERE -->
     <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/leaflet/dist/leaflet.css') }}" />
     <script src="{{ url_for('static', filename='node_modules/leaflet/dist/leaflet.js') }}"></script>
     <!-- LEAFLET FILES END -->
+
     <!-- LEAFLET ROUTING MACHINE BEGIN -->
     <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css') }}" />
     <script src="{{ url_for('static', filename='node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.js') }}"></script>
     <!-- LEAFLET ROUTING MACHINE END -->
+
+    <!-- LEAFLET WEATHER BEGIN -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='ext_plugins/Leaflet.Weather.css') }}" />
+    <script src="{{ url_for('static', filename='ext_plugins/Leaflet.Weather.js') }}"></script>
+    <!-- LEAFLET WEATHER END -->
+
     <!-- MISC. NPM PACKAGES BEGIN -->
     <script src="{{ url_for('static', filename='node_modules/protomaps-leaflet/dist/protomaps-leaflet.min.js') }}"></script>
     <script src="{{ url_for('static', filename='node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js') }}"></script>
-    <!-- MISC. NPM PACKAGES END -->
+    <!-- MISC. NPM PACKAGES END --> 
+
     <style>
         @font-face {
             font-family: 'Noto Sans Bold';
             src: url("{{ url_for('static', filename='fonts/NotoSans-Bold.ttf') }}");
         }
     </style>
+
+
+    <!--<link href="Leaflet.Weather.css" rel="stylesheet" type="text/css" />
+    <script src="Leaflet.Weather.js"></script> -->
+
+
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layouts.css') }}" />
     <title>GPS Map</title>
+
 </head>
 <body>
+
     <!-- This div will hold the map -->
     <div id="map"></div>
     <div id="overlay">
@@ -36,6 +54,7 @@
             <h2 id="direction"></h2>
         </div>
     </div>
+
     <script src="{{ url_for('static', filename='scripts/locations.js') }}"></script>
     <script src="{{ url_for('static', filename='scripts/map.js' ) }}"></script>
 </body>

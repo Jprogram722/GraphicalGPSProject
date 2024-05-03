@@ -10,3 +10,6 @@ static/node_modules/*
 # PMTiles/OSRM
 static/maps/*
 static/osrm/*
+
+# Api Key
+api.txt

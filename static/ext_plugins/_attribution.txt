@@ -1,0 +1,2 @@
+Leaflet.Weather by oskosk
+https://github.com/oskosk/Leaflet.Weather
