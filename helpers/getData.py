@@ -28,6 +28,8 @@ def send_data_arduino() -> dict:
 
     return data_obj
 
+def parse_data_pi():
+    serialLinesObtained = 0
 def parse_data_pi() -> dict:
     """
     This function will read gps data from the serial monitor and parse the
@@ -39,11 +41,11 @@ def parse_data_pi() -> dict:
     """
 
     piCom = serial.Serial('/dev/serial0', 9600)
-    
-    while True:
-        
-        # init variables for the fomatted lattitude and longitude
-        latitude_degrees = longitude_degrees = 0
+
+    latitude_degrees = longitude_degrees = 0
+    speed_kph = 0 
+
+    while (serialLinesObtained < 2):
 
         # get data from the serial monitor
         pi_str = piCom.readline().decode('utf-8')
@@ -66,8 +68,14 @@ def parse_data_pi() -> dict:
                 longitude_degrees = float(longitude_mag[:3]) + (float(longitude_mag[3:]) / 60)
                 if(longitude_dir == "W"):
                     longitude_degrees *= -1
+            
+            serialLinesObtained += 1
+        
+        if (pi_array[0] == "$GPVTG"):
+            speed_kph = pi_array[7]
+            serialLinesObtained += 1
 
-            return {"Latitude": latitude_degrees, "Longitude": longitude_degrees, "Bearing": None}
+    return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Bearing": None, "Speed": speed_kph }
 
 
 
