@@ -3,8 +3,6 @@
 from serial.tools import list_ports
 import serial
 
-serialLinesObtained = 0
-
 def get_port() -> str:
     # gets the list of ports
     ports = list_ports.comports()
@@ -31,6 +29,7 @@ def send_data_arduino() -> dict:
     return data_obj
 
 def parse_data_pi():
+    serialLinesObtained = 0
     piCom = serial.Serial('/dev/serial0', 9600)
     while (serialLinesObtained < 2):
         
