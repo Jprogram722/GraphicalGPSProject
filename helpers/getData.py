@@ -3,6 +3,8 @@
 from serial.tools import list_ports
 import serial
 
+serialLinesObtained = 0
+
 def get_port() -> str:
     # gets the list of ports
     ports = list_ports.comports()
@@ -30,7 +32,7 @@ def send_data_arduino() -> dict:
 
 def parse_data_pi():
     piCom = serial.Serial('/dev/serial0', 9600)
-    while True:
+    while (serialLinesObtained < 2):
         
         latitude_degrees = longitude_degrees = 0
 
@@ -53,8 +55,14 @@ def parse_data_pi():
                 longitude_degrees = float(longitude_mag[:3]) + (float(longitude_mag[3:]) / 60)
                 if(longitude_dir == "W"):
                     longitude_degrees *= -1
+            
+            serialLinesObtained += 1
+        
+        if (pi_array[0] == "$GPVTG"):
+            speedKph = pi_array[7]
+            serialLinesObtained += 1
 
-            return {"Latitude": latitude_degrees, "Longitude": longitude_degrees, "Bearing": None}
+    return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Bearing": None, "Speed": speedKph }
 
 
 
