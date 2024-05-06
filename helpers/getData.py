@@ -39,13 +39,17 @@ def parse_data_pi() -> dict:
     """
 
     piCom = serial.Serial('/dev/serial0', 9600)
+    
     while True:
         
+        # init variables for the fomatted lattitude and longitude
         latitude_degrees = longitude_degrees = 0
 
+        # get data from the serial monitor
         pi_str = piCom.readline().decode('utf-8')
         pi_str = pi_str.replace("\n", "")
 
+        # split string into array
         pi_array = pi_str.split(",")
         if (pi_array[0] == "$GPGGA"):
 
