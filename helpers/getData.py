@@ -34,6 +34,7 @@ def parse_data_pi():
     while (serialLinesObtained < 2):
         
         latitude_degrees = longitude_degrees = 0
+        speed_kph = 0
 
         pi_str = piCom.readline().decode('utf-8')
         pi_str = pi_str.replace("\n", "")
@@ -58,10 +59,10 @@ def parse_data_pi():
             serialLinesObtained += 1
         
         if (pi_array[0] == "$GPVTG"):
-            speedKph = pi_array[7]
+            speed_kph = pi_array[7]
             serialLinesObtained += 1
 
-    return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Bearing": None, "Speed": speedKph }
+    return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Bearing": None, "Speed": speed_kph }
 
 
 
