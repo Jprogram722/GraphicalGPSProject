@@ -31,10 +31,11 @@ def send_data_arduino() -> dict:
 def parse_data_pi():
     serialLinesObtained = 0
     piCom = serial.Serial('/dev/serial0', 9600)
+
+    latitude_degrees = longitude_degrees = 0
+    speed_kph = 0 
+
     while (serialLinesObtained < 2):
-        
-        latitude_degrees = longitude_degrees = 0
-        speed_kph = 0
 
         pi_str = piCom.readline().decode('utf-8')
         pi_str = pi_str.replace("\n", "")
