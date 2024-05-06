@@ -28,7 +28,16 @@ def send_data_arduino() -> dict:
 
     return data_obj
 
-def parse_data_pi():
+def parse_data_pi() -> dict:
+    """
+    This function will read gps data from the serial monitor and parse the
+    data to make it human readable
+
+    Example:
+    >>> parse_data_pi()
+    >>> {"Latitude": float, "Longitude": float, "Bearing": int}
+    """
+
     piCom = serial.Serial('/dev/serial0', 9600)
     while True:
         
