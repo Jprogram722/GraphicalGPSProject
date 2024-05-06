@@ -15,6 +15,10 @@ let map = L.map('map', { zoomControl: false });
         
         // Update marker position to the new center
         currentMarker.setLatLng(new L.LatLng(coordinates[0], coordinates[1]));
+
+        // Update the route
+        updateRoute();
+
     };
 
     const rotateMarker = (bearing) => {
