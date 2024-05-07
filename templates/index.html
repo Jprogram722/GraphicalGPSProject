@@ -26,30 +26,26 @@
         <script src="{{ url_for('static', filename='node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js') }}"></script>
         <!-- MISC. NPM PACKAGES END --> 
 
-
-        <!--<link href="Leaflet.Weather.css" rel="stylesheet" type="text/css" />
-        <script src="Leaflet.Weather.js"></script> -->
-
-
         <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/layouts.css') }}" />
         <title>GPS Map</title>
 
     </head>
-<body>
+    <body>
 
-    <!-- This div will hold the map -->
-    <div id="map"></div>
-    <div id="overlay">
-        <div class="overlay-item" id="location">
-            <h2 id="coordinates"></h2>
+        <div id="map"></div>
+        <div id="overlay">
+            <div class="overlay-item" id="location">
+                <h2 id="coordinates"></h2>
+            </div>
+            <div class="overlay-item" id="compass">
+                <h2 id="direction"></h2>
+            </div>
         </div>
-        <div class="overlay-item" id="compass">
-            <h2 id="direction"></h2>
-        </div>
-    </div>
 
-    <script src="{{ url_for('static', filename='scripts/locations.js') }}"></script>
-    <script src="{{ url_for('static', filename='scripts/map.js' ) }}"></script>
-</body>
+        <script src="{{ url_for('static', filename='scripts/locations.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/controls.js') }}"></script>
+        <script src="{{ url_for('static', filename='scripts/map.js' ) }}"></script>
+        
+    </body>
 </html>
