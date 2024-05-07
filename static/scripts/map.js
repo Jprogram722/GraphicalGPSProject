@@ -1,5 +1,10 @@
 // create and set map view
-let map = L.map('map', { zoomControl: false });
+let map = L.map('map', { 
+    zoomControl: false,
+    doubleClickZoom: false,
+    scrollWheelZoom: 'center',
+    dragging: false
+});
 map.setView([44.650627, -63.597140], 16)
 
 /**
@@ -87,11 +92,27 @@ const updateRoute = () => {
     }
 }
 
+/**
+ * Toggle centering. If enabled, the map will only zoom into the center and prevent map panning. If not, then those
+ * things will be enabled
+ */
+const toggleDragging = () => {
+    if (draggingEnabled) {
+        map.flyTo(currentMarker.getLatLng())
+        map.dragging.disable();
+    }
+    else {
+        map.dragging.enable();
+    }
+    draggingEnabled = !draggingEnabled
+}
+
 let server = window.location;
 const coordinatesTag = document.querySelector("#coordinates");
 const direction = document.querySelector("#direction");
 coordinatesTag.textContent = "Loading";
 direction.textContent = "Loading";
+draggingEnabled = false;
 
 // create the custom icon
 const customIcon = L.icon({
@@ -111,6 +132,9 @@ const layer = protomapsL.leafletLayer({
     theme:'light'
 }).addTo(map);
 
+// add the center toggle
+L.control.toggleDragging({ position: 'bottomleft'}).addTo(map);
+
 // create the routing functionality
 const mapRouting =  L.Routing.control({
     // FIXME: currently only detects a server running under localhost:5500
@@ -120,7 +144,7 @@ const mapRouting =  L.Routing.control({
     addWaypoints: false,
     position: 'bottomright'
 }).addTo(map);
-var routeEnd = L.control.dropdown({ position: 'bottomright' }).addTo(map);
+const routeEnd = L.control.dropdown({ position: 'bottomright' }).addTo(map);
 
 // fetching arduino data
 (async function getData() {
@@ -130,7 +154,10 @@ var routeEnd = L.control.dropdown({ position: 'bottomright' }).addTo(map);
         console.log(data);
 
         if(data.Longitude && data.Latitude){
-            map.panTo([data.Latitude, data.Longitude]);
+            // only move map if panning is disabled
+            if (!draggingEnabled) {
+                map.panTo([data.Latitude, data.Longitude]);
+            }
             updateMarker([data.Latitude, data.Longitude, data.Bearing]);
             updateLatLongOverlay();
         }

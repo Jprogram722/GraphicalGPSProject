@@ -36,3 +36,21 @@ L.Control.Dropdown = L.Control.extend({
 L.control.dropdown = function(opts) {
     return new L.Control.Dropdown(opts);
 }
+
+/**
+ * This button toggles/untoggles map centering on the user marker. Helpful if you need your end user to
+ * pan out the map to view their destination and stuff.
+ */
+L.Control.ToggleDragging = L.Control.extend({
+    onAdd: map => {
+        var button = L.DomUtil.create("button");
+        button.textContent = "Toggle Dragging";
+
+        button.onclick = function(){toggleDragging()};
+
+        return button;
+    }
+})
+L.control.toggleDragging = function(opts) {
+    return new L.Control.ToggleDragging(opts);
+}
