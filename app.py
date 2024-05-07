@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, make_response, send_from_directory
 import serial.serialutil
-from helpers.getData import send_data_arduino, parse_data_pi
+from helpers.getData import parse_data_pi
 import serial
 
 global data_gps
@@ -18,8 +18,8 @@ def getArduinoData():
         data["Status"] = "Success"
 
         return jsonify(data)
-    except serial.serialutil.SerialException:
-        return jsonify({"Latitude": None, "Longitude": None, "Bearing": None, "Status": "Failed"})
+    except Exception as err:
+        return jsonify({"Latitude": None, "Longitude": None, "Bearing": None, "Speed": None ,"Status": "Failed"})
     
 @app.route("/api/maps/<path:filename>")
 def getMap(filename):
