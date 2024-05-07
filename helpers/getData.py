@@ -34,8 +34,6 @@ def send_data_arduino() -> dict:
 
     return data_obj
 
-def parse_data_pi():
-    serialLinesObtained = 0
 def parse_data_pi() -> dict:
     """
     This function will read gps data from the serial monitor and parse the
@@ -48,8 +46,9 @@ def parse_data_pi() -> dict:
 
     piCom = serial.Serial('/dev/serial0', 9600)
 
-    latitude_degrees = longitude_degrees = 0
+    latitude_degrees = longitude_degrees = altitude = 0
     speed_kph = 0 
+    serialLinesObtained = 0
 
     while (serialLinesObtained < 2):
 
@@ -64,8 +63,9 @@ def parse_data_pi() -> dict:
             latitude_dir = pi_array[3]
             longitude_mag = pi_array[4]
             longitude_dir = pi_array[5]
+            altitude = pi_array[10]
             
-            if(latitude_mag != "" and longitude_mag != ""):
+            if(latitude_mag != "" and longitude_mag != "" and altitude != ""):
                 latitude_degrees = float(latitude_mag[:2]) + (float(latitude_mag[2:]) / 60)
                 if(latitude_dir == "S"):
                     latitude_degrees *= -1
@@ -79,7 +79,11 @@ def parse_data_pi() -> dict:
             speed_kph = pi_array[7]
             serialLinesObtained += 1
 
-    return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Bearing": get_magnetometer_data(), "Speed": speed_kph }
+    # real return
+    return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Altitude": altitude,"Bearing": get_magnetometer_data(), "Speed": speed_kph }
+    
+    # test return
+    # return { "Latitude": 44.11111111111, "Longitude": -61.2222222222, "Altitude": 435.231223,"Bearing": get_magnetometer_data(), "Speed": 31.11111111 }
 
 def get_magnetometer_data() -> float:
 
