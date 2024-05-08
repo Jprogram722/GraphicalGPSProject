@@ -39,8 +39,21 @@ const rotateMarker = (bearing) => {
 /** 
  * Update the current latitude/longitude displayed on the overlay
  */
-const updateLatLongOverlay = () => {
-    coordinatesTag.textContent = `Latitude: ${currentMarker._latlng.lat}, Longitude: ${currentMarker._latlng.lng}`;
+const updateLatLongOverlay = (data) => {
+    let HTMLstring = "";
+    if(data.Latitude){
+       HTMLstring += `Latitude: ${Math.round(currentMarker._latlng.lat * 100) / 100}<br>`; 
+    }
+    if(data.Longitude){
+        HTMLstring += `Longitude: ${Math.round(currentMarker._latlng.lng * 100) / 100}<br>`; 
+    }
+    if(data.Altitude){
+        HTMLstring += `Altitude: ${Math.round(data.Altitude * 100) / 100}<br>`
+    }
+    if(data.Speed){
+        HTMLstring += `Speed: ${Math.round(data.Speed * 100) / 100}`;
+    }
+    coordinatesTag.innerHTML = HTMLstring;
 }
 
 /** 
@@ -163,7 +176,7 @@ map.on("dblclick", function(event){
                 map.panTo([data.Latitude, data.Longitude]);
             }
             updateMarker([data.Latitude, data.Longitude, data.Bearing]);
-            updateLatLongOverlay();
+            updateLatLongOverlay(data);
         }
 
         if(data.Bearing){
