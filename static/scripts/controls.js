@@ -9,13 +9,25 @@ L.Control.ToggleDragging = L.Control.extend({
     onAdd: map => {
         var button = L.DomUtil.create("button");
         button.classList.add("leaflet-toggle-dragging");
-        button.textContent = "Toggle Dragging";
+        button.innerHTML = createImageElement(panImg);
 
-        button.onclick = function(){toggleDragging()};
+        button.onclick = function(){
+            let buttonText = button.innerHTML;
+            button.innerHTML = buttonText == createImageElement(panImg) ? createImageElement(pinImg) : createImageElement(panImg);
+            toggleDragging();
+        };
 
         return button;
     }
 })
 L.control.toggleDragging = function(opts) {
     return new L.Control.ToggleDragging(opts);
+}
+
+/**
+ * Helper function, returns an img element with the specified path as src.
+ * @param {String} url
+ */
+const createImageElement = (url) => {
+    return `<img src="${url}">`
 }

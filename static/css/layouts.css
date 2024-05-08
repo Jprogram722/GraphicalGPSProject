@@ -31,3 +31,13 @@ body {
 #compass {
     margin-right: 20px;
 }
+
+.leaflet-toggle-dragging {
+    width: 75px;
+    height: 75px;
+}
+
+.leaflet-toggle-dragging img {
+    width: 75%;
+    height: 75%;
+}
