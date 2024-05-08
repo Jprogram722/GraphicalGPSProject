@@ -47,10 +47,12 @@ def parse_data_pi() -> dict:
     piCom = serial.Serial('/dev/serial0', 9600)
 
     latitude_degrees = longitude_degrees = altitude = 0
-    speed_kph = 0 
+    speed_kph = 0
     serialLinesObtained = 0
 
     while (serialLinesObtained < 2):
+        
+        serialLinesObtained = 0
 
         # get data from the serial monitor
         pi_str = piCom.readline().decode('utf-8')
@@ -63,7 +65,9 @@ def parse_data_pi() -> dict:
             latitude_dir = pi_array[3]
             longitude_mag = pi_array[4]
             longitude_dir = pi_array[5]
-            altitude = pi_array[10]
+            altitude = pi_array[9]
+            if(altitude != ""):
+                altitude = float(altitude)
             
             if(latitude_mag != "" and longitude_mag != "" and altitude != ""):
                 latitude_degrees = float(latitude_mag[:2]) + (float(latitude_mag[2:]) / 60)
@@ -76,9 +80,9 @@ def parse_data_pi() -> dict:
             serialLinesObtained += 1
         
         if (pi_array[0] == "$GPVTG"):
-            speed_kph = pi_array[7]
+            speed_kph = float(pi_array[7].lstrip("0"))
             serialLinesObtained += 1
-
+    
     # real return
     return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Altitude": altitude,"Bearing": get_magnetometer_data(), "Speed": speed_kph }
     
@@ -96,8 +100,8 @@ def get_magnetometer_data() -> float:
 
     # print(f"x:{x:.2f}Gs, y:{y:.2f}Gs, z{z:.2f}Gs")
 
-    # get the angle in degrees
-    angle = math.degrees(math.atan2(y, x))
+    # get the angle in degrees (143 is the offset)
+    angle = math.degrees(math.atan2(y, x)) - 143
     # no negative angles
     if angle < 0:
         angle = angle + 360

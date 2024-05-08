@@ -142,7 +142,7 @@ var routeEnd = L.control.dropdown({ position: 'bottomright' }).addTo(map);
         let data = await res.json();
         console.log(data);
 
-        if(data.Longitude && data.Latitude && data.Speed){
+        if(data.Longitude !== 0 && data.Latitude !== 0){
             map.panTo([data.Latitude, data.Longitude]);
             updateMarker([data.Latitude, data.Longitude, data.Bearing]);
             updateLatLongOverlay(data);
