@@ -22,7 +22,7 @@ const updateMarker = (coordinates) => {
     currentMarker.setLatLng(new L.LatLng(coordinates[0], coordinates[1]));
 
     // Update the route
-    updateRoute();
+    updateRoute(destinationCoords);
 
 };
 
@@ -77,18 +77,15 @@ const updateBearingOverlay = (bearing) => {
 /** 
  * Update the current route's line and itinerary (e.g. marker moved or a different destination was selected)
  */
-const updateRoute = () => {
-    if (routeEnd._container.value != -1) {
-        var end = locations[routeEnd._container.value];
-        // program craps itself if start + destination are the same
-        waypoints = [
-            currentMarker.getLatLng(),
-            L.latLng(end.lat, end.lng)
-        ];
-        if (waypoints[0].lat !== waypoints[1].lat || waypoints[0].lng !== waypoints[1].lng) {
-            mapRouting.setWaypoints(waypoints);
-            mapRouting.route();
-        }
+const updateRoute = (destination) => {
+    destinationCoords = destination;
+    waypoints = [
+        currentMarker.getLatLng(),
+        L.latLng(destination)
+    ];
+    if (waypoints[0].lat !== waypoints[1].lat || waypoints[0].lng !== waypoints[1].lng) {
+        mapRouting.setWaypoints(waypoints);
+        mapRouting.route();
     }
 }
 
@@ -125,6 +122,8 @@ const customIcon = L.icon({
 // create 2 markers, one for the user, one for calculating angle
 let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
 let previousMaker = L.marker(map.getCenter());
+// create a coordinates array for the destination
+let destinationCoords;
 
 // import the .pmtiles file
 const layer = protomapsL.leafletLayer({
@@ -144,7 +143,11 @@ const mapRouting =  L.Routing.control({
     addWaypoints: false,
     position: 'bottomright'
 }).addTo(map);
-const routeEnd = L.control.dropdown({ position: 'bottomright' }).addTo(map);
+
+// Double click to set route destination
+map.on("dblclick", function(event){
+    updateRoute(event.latlng)
+});
 
 // fetching arduino data
 (async function getData() {
