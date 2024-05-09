@@ -9,7 +9,8 @@ import qmc5883l
 import board
 
 
-prev_lat = prev_long = 0
+prev_lat = 44.66917750140716
+prev_long = -63.61348345630519
 
 def get_port() -> str:
     # gets the list of ports
@@ -66,9 +67,21 @@ def get_distance(lat_mag: float, long_mag: float) -> float:
     """
     
     # earths radius
-    R = 6371000 #m
+    R = 6371 #km
 
+    d_lat = lat_mag - prev_lat
+    d_long = long_mag - prev_long
+
+    current_lat_mag_radians = (lat_mag) * math.pi/180
+    prev_lat_mag_radians = (prev_lat) * math.pi/180
+
+    a = a = (pow(math.sin(d_lat / 2), 2) +
+         pow(math.sin(d_long / 2), 2) *
+             math.cos(current_lat_mag_radians) * math.cos(prev_lat_mag_radians))
     
+    c = 2 * math.asin(math.sqrt(a))
+
+    return c*R
     
 
 
@@ -200,4 +213,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    print(get_distance(44.66493030437651, -63.61204579060415))
