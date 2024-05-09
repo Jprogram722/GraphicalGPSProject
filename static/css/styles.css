@@ -3,20 +3,20 @@
     src: url("../fonts/NotoSans-Bold.ttf");
 }
 
-.overlay-item {
-    background-color: rgba(131, 207, 255, 0.7);
-    border-radius: 15px;
-    margin-top: 20px;
-}
-
-.overlay-item h2 {
-    color: black;
-    font-family: 'Noto Sans Bold', sans-serif;
-}
-
 .leaflet-toggle-dragging {
     border: 2px solid rgba(0,0,0,0.2);
     background-clip: padding-box;
     background-color: white;
     border-radius: 4px;
+}
+
+.leaflet-display-status, .leaflet-compass {
+    background-color: rgba(131, 207, 255, 0.7);
+    border-radius: 15px;
+}
+
+.leaflet-display-status h2, .leaflet-compass h2 {
+    color: black;
+    font-family: 'Noto Sans Bold', sans-serif;
+    font-size: 24px;
 }

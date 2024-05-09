@@ -45,7 +45,7 @@ const updateLatLongOverlay = (data) => {
     if(data.Speed){
         HTMLstring += `Speed: ${Math.round(data.Speed * 100) / 100}`;
     }
-    coordinatesTag.innerHTML = HTMLstring;
+    updateStatus(HTMLstring);
 }
 
 /** 
@@ -54,36 +54,32 @@ const updateLatLongOverlay = (data) => {
  */
 const updateBearingOverlay = (bearing) => {
     if(bearing > 345 || bearing <= 30){
-        direction.textContent = "N";
+        updateCompass("N");
     }
     else if (bearing > 30 && bearing < 75){
-        direction.textContent = "NE";
+        updateCompass("NE");
     }
     else if (bearing >= 75 && bearing <= 120){
-        direction.textContent = "E";
+        updateCompass("E");
     }
     else if (bearing > 120 && bearing < 165){
-        direction.textContent = "SE";
+        updateCompass("SE");
     }
     else if (bearing >= 165 && bearing <= 210){
-        direction.textContent = "S";
+        updateCompass("S");
     }
     else if (bearing > 210 && bearing < 255){
-        direction.textContent = "SW";
+        updateCompass("SW");
     }
     else if (bearing >= 255 && bearing <= 300){
-        direction.textContent = "W";
+        updateCompass("W");
     }
     else if (bearing > 300 && bearing < 345){
-        direction.textContent = "NW";
+        updateCompass("NW");
     }
 }
 
 let server = window.location;
-const coordinatesTag = document.querySelector("#coordinates");
-const direction = document.querySelector("#direction");
-coordinatesTag.textContent = "Loading";
-direction.textContent = "Loading";
 
 // create and set map view
 let map = L.map('map', { 
@@ -96,6 +92,8 @@ map.setView([44.650627, -63.597140], 16);
 
 // Add controls to the map
 L.control.toggleDragging({ position: 'bottomleft' }).addTo(map);
+L.control.displayStatus({ position: 'topleft'}).addTo(map);
+L.control.compass({ position: "topright"}).addTo(map);
 mapRouting.addTo(map);
 
 // Listener events
