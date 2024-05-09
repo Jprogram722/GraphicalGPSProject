@@ -11,14 +11,14 @@ def index():
 
 @app.route("/api/get-data")
 def getArduinoData():
-    try:
-        data = parse_data_pi()
-        data["Status"] = "Success"
+    
+    data = parse_data_pi()
+    data["Status"] = "Success"
 
-        return jsonify(data)
-    except Exception as err:
-        print(err)
-        return jsonify({"Latitude": None, "Longitude": None, "Altitude":None, "Bearing": None, "Speed": None ,"Status": "Failed"})
+    return jsonify(data)
+    # except Exception as err:
+       # print(err)
+	#return jsonify({"Latitude": None, "Longitude": None, "Altitude":None, "Bearing": None, "Speed": None ,"Status": "Failed"})
     
 @app.route("/api/maps/<path:filename>")
 def getMap(filename):

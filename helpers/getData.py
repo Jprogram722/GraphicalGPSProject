@@ -9,6 +9,9 @@ import qmc5883l
 import board
 
 
+prev_lat = 44.66917750140716
+prev_long = -63.61348345630519
+
 def get_port() -> str:
     # gets the list of ports
     ports = list_ports.comports()
@@ -34,6 +37,54 @@ def send_data_arduino() -> dict:
 
     return data_obj
 
+def append_sentance(sentance_array: list, frame_array: list[list]) -> list[list]:
+    if((sentance_array not in frame_array) and (sentance_array[0] == "$GPGGA" or sentance_array[0] == "$GPRMC")):
+        frame_array.append(sentance_array)
+        return frame_array
+    else:
+        return frame_array
+    
+def get_GPGGA_data(frame_array: list[list]):
+    for sentance in frame_array:
+        if(sentance[0] == "$GPGGA"):
+            # lat_mag, lat_dir, long_mag, long_dir, altitude
+            return sentance[2], sentance[3], sentance[4], sentance[5], sentance[9]
+        
+            
+def get_GPRMC_data(frame_array: list[list]):
+    for sentance in frame_array:
+	    if(sentance[0] == "$GPRMC"):
+	        return sentance[7]
+
+def set_prev_coordinates(lat_mag: float, long_mag: float):
+    prev_lat = lat_mag
+    prev_long = long_mag
+
+def get_distance(lat_mag: float, long_mag: float) -> float:
+    """
+    This function will get the distance traveled by the user.
+    This involves using the haversine function which is haversine(theta) = sin^2(theta/2)
+    """
+    
+    # earths radius
+    R = 6371 #km
+
+    d_lat = lat_mag - prev_lat
+    d_long = long_mag - prev_long
+
+    current_lat_mag_radians = (lat_mag) * math.pi/180
+    prev_lat_mag_radians = (prev_lat) * math.pi/180
+
+    a = a = (pow(math.sin(d_lat / 2), 2) +
+         pow(math.sin(d_long / 2), 2) *
+             math.cos(current_lat_mag_radians) * math.cos(prev_lat_mag_radians))
+    
+    c = 2 * math.asin(math.sqrt(a))
+
+    return c*R
+    
+
+
 def parse_data_pi() -> dict:
     """
     This function will read gps data from the serial monitor and parse the
@@ -48,11 +99,9 @@ def parse_data_pi() -> dict:
 
     latitude_degrees = longitude_degrees = altitude = 0
     speed_kph = 0
-    serialLinesObtained = 0
+    frame_array = []
 
-    while (serialLinesObtained < 2):
-        
-        serialLinesObtained = 0
+    while (len(frame_array) < 2):
 
         # get data from the serial monitor
         pi_str = piCom.readline().decode('utf-8')
@@ -60,28 +109,27 @@ def parse_data_pi() -> dict:
 
         # split string into array
         pi_array = pi_str.split(",")
-        if (pi_array[0] == "$GPGGA"):
-            latitude_mag = pi_array[2]
-            latitude_dir = pi_array[3]
-            longitude_mag = pi_array[4]
-            longitude_dir = pi_array[5]
-            altitude = pi_array[9]
-            if(altitude != ""):
-                altitude = float(altitude)
+	
+        frame_array = append_sentance(pi_array, frame_array)
+    
+
+    latitude_mag, latitude_dir, longitude_mag, longitude_dir, altitude = get_GPGGA_data(frame_array) 
+    if(altitude != ""):
+        altitude = float(altitude)
             
-            if(latitude_mag != "" and longitude_mag != "" and altitude != ""):
-                latitude_degrees = float(latitude_mag[:2]) + (float(latitude_mag[2:]) / 60)
-                if(latitude_dir == "S"):
-                    latitude_degrees *= -1
-                longitude_degrees = float(longitude_mag[:3]) + (float(longitude_mag[3:]) / 60)
-                if(longitude_dir == "W"):
-                    longitude_degrees *= -1
-            
-            serialLinesObtained += 1
-        
-        if (pi_array[0] == "$GPVTG"):
-            speed_kph = float(pi_array[7].lstrip("0"))
-            serialLinesObtained += 1
+    if(latitude_mag != "" and longitude_mag != ""):
+        latitude_degrees = float(latitude_mag[:2]) + (float(latitude_mag[2:]) / 60)
+        if(latitude_dir == "S"):
+            latitude_degrees *= -1
+        longitude_degrees = float(longitude_mag[:3]) + (float(longitude_mag[3:]) / 60)
+        if(longitude_dir == "W"):
+            longitude_degrees *= -1
+
+        if(prev_lat == 0 and prev_long == 0):
+            set_prev_coordinates()
+    
+    # 1.852 kmh / 1 knot conversion rate
+    speed_kph = float(pi_array[7].lstrip("0")) * 1.852
     
     # real return
     return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Altitude": altitude,"Bearing": get_magnetometer_data(), "Speed": speed_kph }
@@ -165,4 +213,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    print(get_distance(44.66493030437651, -63.61204579060415))

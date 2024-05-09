@@ -43,7 +43,7 @@ const updateLatLongOverlay = (data) => {
         HTMLstring += `Altitude: ${Math.round(data.Altitude * 100) / 100}<br>`
     }
     if(data.Speed){
-        HTMLstring += `Speed: ${Math.round(data.Speed * 100) / 100}`;
+        HTMLstring += `Speed: ${Math.round(data.Speed * 100) / 100}km/h`;
     }
     updateStatus(HTMLstring);
 }
