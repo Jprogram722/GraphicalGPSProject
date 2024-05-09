@@ -4,8 +4,8 @@
 draggingEnabled = false;
 statusH2 = L.DomUtil.create("h2");
 compassH2 = L.DomUtil.create("h2");
-statusH2.innerText = "Loading...";
-compassH2.innerText = "Loading...";
+statusH2.innerHTML = "Loading...";
+compassH2.innerHTML = "Loading...";
 
 
 /**
@@ -63,7 +63,7 @@ L.control.displayStatus = (opts) => {
 }
 
 const updateStatus = (text) => {
-    statusH2.innerText = text;
+    statusH2.innerHTML = text;
 }
 
 /**
@@ -83,5 +83,5 @@ L.control.compass = (opts) => {
 }
 
 const updateCompass = (text) => {
-    compassH2.innerText = text;
+    compassH2.innerHTML = text;
 } 
