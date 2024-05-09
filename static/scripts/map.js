@@ -1,12 +1,3 @@
-// create and set map view
-let map = L.map('map', { 
-    zoomControl: false,
-    doubleClickZoom: false,
-    scrollWheelZoom: 'center',
-    dragging: false
-});
-map.setView([44.650627, -63.597140], 16)
-
 /**
  * Update the coordinates for the user marker.
  * it will also use the old and new coordinates to calculate the bearing for the rotation angle
@@ -38,6 +29,7 @@ const rotateMarker = (bearing) => {
 
 /** 
  * Update the current latitude/longitude displayed on the overlay
+ * @param {JSON} data
  */
 const updateLatLongOverlay = (data) => {
     let HTMLstring = "";
@@ -87,81 +79,43 @@ const updateBearingOverlay = (bearing) => {
     }
 }
 
-/** 
- * Update the current route's line and itinerary (e.g. marker moved or a different destination was selected)
- * @param {L.latLng} destination
- */
-const updateRoute = (destination) => {
-    destinationCoords = destination;
-    waypoints = [
-        currentMarker.getLatLng(),
-        L.latLng(destination)
-    ];
-    if (waypoints[0].lat !== waypoints[1].lat || waypoints[0].lng !== waypoints[1].lng) {
-        mapRouting.setWaypoints(waypoints);
-        mapRouting.route();
-    }
-}
-
-/**
- * Toggle centering. If enabled, the map will only zoom into the center and prevent map panning. If not, then those
- * things will be enabled
- */
-const toggleDragging = () => {
-    if (draggingEnabled) {
-        map.flyTo(currentMarker.getLatLng())
-        map.dragging.disable();
-    }
-    else {
-        map.dragging.enable();
-    }
-    draggingEnabled = !draggingEnabled
-}
-
 let server = window.location;
 const coordinatesTag = document.querySelector("#coordinates");
 const direction = document.querySelector("#direction");
 coordinatesTag.textContent = "Loading";
 direction.textContent = "Loading";
-draggingEnabled = false;
 
-// create the custom icon
+// create and set map view
+let map = L.map('map', { 
+    zoomControl: false,
+    doubleClickZoom: false,
+    scrollWheelZoom: 'center',
+    dragging: false
+});
+map.setView([44.650627, -63.597140], 16);
+
+// Add controls to the map
+L.control.toggleDragging({ position: 'bottomleft' }).addTo(map);
+mapRouting.addTo(map);
+
+// Listener events
+map.on("dblclick", function(event){
+    updateRoute(event.latlng)
+});
+
+// Markers/layers
 const customIcon = L.icon({
     iconUrl: '/static/images/user.png',
     iconSize: [75, 75], 
     iconAnchor: [36, 60], 
     popupAnchor: [0, -16] 
 });
-
-// create 2 markers, one for the user, one for calculating angle
-let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
-let previousMaker = L.marker(map.getCenter());
-// create a coordinates array for the destination
-let destinationCoords;
-
-// import the .pmtiles file
 const layer = protomapsL.leafletLayer({
     url: `${server}/api/maps/nova_scotia.pmtiles`, 
     theme:'light'
 }).addTo(map);
-
-// add the center toggle
-L.control.toggleDragging({ position: 'bottomleft'}).addTo(map);
-
-// create the routing functionality
-const mapRouting =  L.Routing.control({
-    // FIXME: currently only detects a server running under localhost:5500
-    serviceUrl: 'http://localhost:5500/route/v1',
-    fitSelectedRoutes: false,
-    draggableWaypoints: false,
-    addWaypoints: false,
-    position: 'bottomright'
-}).addTo(map);
-
-// Double click to set route destination
-map.on("dblclick", function(event){
-    updateRoute(event.latlng)
-});
+let currentMarker = L.marker(map.getCenter(), { icon: customIcon, autoPan: false }).addTo(map); // Add marker with custom icon;
+let previousMaker = L.marker(map.getCenter());
 
 // fetching arduino data
 (async function getData() {
@@ -189,7 +143,3 @@ map.on("dblclick", function(event){
 
     setTimeout(getData, 2000);
 })();
-
-setInterval(() => {
-    map.invalidateSize(); // Refresh map size to ensure correct centering
-}, 1000);
