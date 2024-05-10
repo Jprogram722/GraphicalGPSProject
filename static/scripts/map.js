@@ -85,6 +85,16 @@ const updateBearingOverlay = (bearing) => {
     }
 }
 
+const getDistanceData = async () => {
+    const statsContainer = document.querySelector("#stats");
+    const res = await fetch("/api/get-total-distance");
+    let data = await res.json();
+
+    statsContainer.innerHTML = `
+    Total distance traveled in 12 weeks is: ${Math.round(data.totalDistance * 10**2) / 10**2}km<br>
+    Avg distance per day is: ${Math.round(data.avgDistance * 10**3) / 10**3}km`
+}
+
 let server = window.location;
 
 // create and set map view

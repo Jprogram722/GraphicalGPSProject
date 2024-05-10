@@ -1,5 +1,5 @@
 import sqlite3
-import datetime
+from datetime import datetime, timedelta
 
 # this is the database file for the app
 db_file = "../graphicalGPS.db"
@@ -45,7 +45,7 @@ def insert_into_db(distance: float) -> None:
     try:    
         cursor.execute(f"""
         INSERT INTO distances(distance, time)
-        VALUES ({distance}, '{datetime.datetime.now()}')
+        VALUES ({distance}, '{datetime.now()}')
         """)
 
         conn.commit()
@@ -54,30 +54,40 @@ def insert_into_db(distance: float) -> None:
         print("Could not insert data into database")
         conn.close()
 
-def get_db_data() -> tuple:
+def get_distance_data() -> tuple:
     """
-    This function will get the data from the database
+    This function will get the total distance traveled over 12 weeks or 84 days
     """
 
     conn, cursor = connect_db()
 
     try:
+
+        format_string = "%Y-%m-%d %H:%M:%S.%f"
+
         cursor.execute(
                 """
                 SELECT distance, time FROM distances
                 """)
-            
+        
+        total_distance = 0
+
         for row in cursor.fetchall():
-            print(row)
+            timestamp = datetime.strptime(row[1], format_string)
+            if datetime.now() - timestamp < timedelta(weeks = 12):
+                total_distance += row[0]
+        
+        avg_distance = total_distance / 84
 
         conn.close()
+
+        return {"totalDistance": total_distance, "avgDistance": avg_distance}
+
     except:
         print("could not get data from database")
         conn.close()
 
-
-def main() -> None:
-    ...
+        return {"msg": "Failed to get data"}
 
 if __name__ == "__main__":
-    get_db_data()
+    get_distance_data()

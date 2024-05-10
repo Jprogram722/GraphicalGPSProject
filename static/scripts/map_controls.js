@@ -7,6 +7,10 @@ compassH2 = L.DomUtil.create("h2");
 statusH2.innerHTML = "Loading...";
 compassH2.innerHTML = "Loading...";
 
+const modalContainer = document.querySelector("#distance-selector");
+
+let isVisable = false;
+
 /**
  * The route select is a simple HTML dropdown list that selects from a preset list of locations found in locations.js.
  * If you want to add more locations to the dropdown, edit the JSON data inside that file.
@@ -142,11 +146,10 @@ L.control.showModal = (opts) => {
  * Helper function, toggles the modal
  */
 const toggleModal = () => {
-    modal = document.querySelector("#distance-selector");
-    if (modal.style.visibility === "visible") {
-        modal.style.visibility = "hidden";
-    }
-    else {
-        modal.style.visibility = "visible";
-    }
+    modalContainer.style.display = "flex";
+    getDistanceData();
 }
+
+modalContainer.addEventListener("click", () => {
+    modalContainer.style.display = "none";
+});

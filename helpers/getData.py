@@ -54,6 +54,7 @@ def get_GPRMC_data(frame_array: list[list]):
 	    if(sentance[0] == "$GPRMC"):
 	        return sentance[7]
 
+
 def get_distance(lat_mag: float, long_mag: float, prev_lat: float, prev_long: float) -> float:
     """
     This function will get the distance traveled by the user.

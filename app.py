@@ -1,12 +1,11 @@
 from flask import Flask, render_template, jsonify, make_response, send_from_directory, request
-import serial.serialutil
-from helpers import getData
-import serial
+from helpers import getData, getSQL
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
+    getSQL.create_db()
     return render_template('index.html')
 
 @app.route("/api/get-data")
@@ -36,4 +35,6 @@ if __name__ == '__main__':
 
 @app.route("/api/get-total-distance")
 def get_distance():
-    ...
+    response = getSQL.get_distance_data()
+
+    return response
