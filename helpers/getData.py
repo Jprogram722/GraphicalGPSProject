@@ -3,14 +3,10 @@
 from serial.tools import list_ports
 import serial
 import smbus2
-import time
+from datetime import datetime
 import math
 import qmc5883l
 import board
-
-
-prev_lat = 44.66917750140716
-prev_long = -63.61348345630519
 
 def get_port() -> str:
     # gets the list of ports
@@ -56,36 +52,48 @@ def get_GPRMC_data(frame_array: list[list]):
 	    if(sentance[0] == "$GPRMC"):
 	        return sentance[7]
 
-def set_prev_coordinates(lat_mag: float, long_mag: float):
-    prev_lat = lat_mag
-    prev_long = long_mag
-
-def get_distance(lat_mag: float, long_mag: float) -> float:
+def get_distance(lat_mag: float, long_mag: float, prev_lat: float, prev_long: float) -> float:
     """
     This function will get the distance traveled by the user.
     This involves using the haversine function which is haversine(theta) = sin^2(theta/2)
+
+    >>> get_distance(44.66493030437651, -63.61204579060415)
+    >>> 0.4857593908446175
     """
     
     # earths radius
     R = 6371 #km
 
-    d_lat = lat_mag - prev_lat
-    d_long = long_mag - prev_long
+    # get the change in position in radians
+    d_lat = (lat_mag - prev_lat) * math.pi/180
+    d_long = (long_mag - prev_long) * math.pi/180
 
+    # get the current and previous latitude in radians
     current_lat_mag_radians = (lat_mag) * math.pi/180
     prev_lat_mag_radians = (prev_lat) * math.pi/180
 
+    # sub compnent of the distance calculation
     a = a = (pow(math.sin(d_lat / 2), 2) +
          pow(math.sin(d_long / 2), 2) *
              math.cos(current_lat_mag_radians) * math.cos(prev_lat_mag_radians))
     
+    # another subcomponent of haversine function
     c = 2 * math.asin(math.sqrt(a))
 
-    return c*R
+    return c*R # return distance in kilometers
+
+def get_dt(current_time: float) -> float:
+    """
+    This function will get the change in time
+    """
+
+    return datetime.now().timestamp() - current_time
+
+
     
 
 
-def parse_data_pi() -> dict:
+def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: float) -> dict:
     """
     This function will read gps data from the serial monitor and parse the
     data to make it human readable
@@ -98,8 +106,9 @@ def parse_data_pi() -> dict:
     piCom = serial.Serial('/dev/serial0', 9600)
 
     latitude_degrees = longitude_degrees = altitude = 0
-    speed_kph = 0
+    speed_kph: float = 0
     frame_array = []
+    d_distance: float = 0
 
     while (len(frame_array) < 2):
 
@@ -118,6 +127,7 @@ def parse_data_pi() -> dict:
         altitude = float(altitude)
             
     if(latitude_mag != "" and longitude_mag != ""):
+        print(latitude_mag, longitude_mag)
         latitude_degrees = float(latitude_mag[:2]) + (float(latitude_mag[2:]) / 60)
         if(latitude_dir == "S"):
             latitude_degrees *= -1
@@ -126,13 +136,34 @@ def parse_data_pi() -> dict:
             longitude_degrees *= -1
 
         if(prev_lat == 0 and prev_long == 0):
-            set_prev_coordinates()
-    
-    # 1.852 kmh / 1 knot conversion rate
-    speed_kph = float(pi_array[7].lstrip("0")) * 1.852
+            prev_lat, prev_long = latitude_degrees, longitude_degrees
+        else:
+            if(distance == 0):
+                distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long)
+                prev_lat, prev_long = latitude_degrees, longitude_degrees
+            else:
+                d_distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long) - distance
+                distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long)
+
+
+    if(time == 0 and d_distance == 0):
+        time = datetime.now().timestamp()
+    else:
+        speed_kph = (d_distance / get_dt(time)) * 60 # convert seconds to hours
+        time = datetime.now().timestamp()
     
     # real return
-    return { "Latitude": latitude_degrees, "Longitude": longitude_degrees, "Altitude": altitude,"Bearing": get_magnetometer_data(), "Speed": speed_kph }
+    return { 
+        "Latitude": latitude_degrees, 
+        "Longitude": longitude_degrees, 
+        "Altitude": altitude,
+        "Bearing": get_magnetometer_data(), 
+        "Speed": abs(speed_kph),
+        "Distance": distance,
+        "Time": time,
+        "prevLat": prev_lat,
+        "prevLong": prev_long,
+    }
     
     # test return
     # return { "Latitude": 44.11111111111, "Longitude": -61.2222222222, "Altitude": 435.231223,"Bearing": get_magnetometer_data(), "Speed": 31.11111111 }
@@ -213,4 +244,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    print(get_distance(44.66493030437651, -63.61204579060415))
+    print(get_dt(datetime(2024, 5, 9, 13, 58, 0)))

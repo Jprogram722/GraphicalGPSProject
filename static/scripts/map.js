@@ -1,3 +1,9 @@
+
+localStorage.setItem("prevLat", "0");
+localStorage.setItem("prevLong", "0");
+localStorage.setItem("distance", "0");
+localStorage.setItem("time", "0");
+
 /**
  * Update the coordinates for the user marker.
  * it will also use the old and new coordinates to calculate the bearing for the rotation angle
@@ -118,9 +124,19 @@ let previousMaker = L.marker(map.getCenter());
 // fetching arduino data
 (async function getData() {
     try{
-        let res = await fetch('/api/get-data');
+        let res = await fetch(`
+        /api/get-data?distance=${localStorage.getItem("distance")}
+        &time=${localStorage.getItem("time")}
+        &prev-lat=${localStorage.getItem("prevLat")}
+        &prev-long=${localStorage.getItem("prevLong")}
+        `);
         let data = await res.json();
         console.log(data);
+
+        localStorage.setItem("prevLong", `${data.prevLong}`);
+        localStorage.setItem("prevLat", `${data.prevLat}`);
+        localStorage.setItem("distance", `${data.Distance}`);
+        localStorage.setItem("time", `${data.Time}`);
 
         if(data.Longitude && data.Latitude){
             // only move map if panning is disabled
@@ -136,7 +152,7 @@ let previousMaker = L.marker(map.getCenter());
         }  
     }
     catch(err){
-        console.log("Couldn't get data")
+        console.log(err);
     }
 
     setTimeout(getData, 2000);
