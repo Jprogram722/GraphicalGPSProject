@@ -17,10 +17,10 @@ const updateMarker = (coordinates) => {
     
     // Update marker position to the new center
     currentMarker.setLatLng(new L.LatLng(coordinates[0], coordinates[1]));
-
-    // Update the route
-    updateRoute(destinationCoords);
-
+    if (destinationCoords) {
+	// Update the route
+	updateRoute(destinationCoords);
+    };
 };
 
 /** 

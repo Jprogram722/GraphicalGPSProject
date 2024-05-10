@@ -63,10 +63,10 @@ def get_db_data() -> tuple:
 
     try:
         cursor.execute(
-            """
-            SELECT distance, time FROM distances
-            """)
-        
+                """
+                SELECT distance, time FROM distances
+                """)
+            
         for row in cursor.fetchall():
             print(row)
 

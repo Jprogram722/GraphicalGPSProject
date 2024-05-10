@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, make_response, send_from_directory, request
 import serial.serialutil
-from helpers.getData import parse_data_pi
+from helpers import getData
 import serial
 
 app = Flask(__name__)
@@ -17,7 +17,7 @@ def getArduinoData():
     prev_long = float(request.args.get('prev-long'))
     prev_lat = float(request.args.get('prev-lat'))
 
-    data = parse_data_pi(distance, time, prev_lat, prev_long)
+    data = getData.parse_data_pi(distance, time, prev_lat, prev_long)
     data["Status"] = "Success"
 
     return jsonify(data)
@@ -33,3 +33,7 @@ def getMap(filename):
 
 if __name__ == '__main__':
     app.run()
+
+@app.route("/api/get-total-distance")
+def get_distance():
+    ...

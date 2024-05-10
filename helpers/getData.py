@@ -7,6 +7,8 @@ from datetime import datetime
 import math
 import qmc5883l
 import board
+from helpers import getSQL
+
 
 def get_port() -> str:
     # gets the list of ports
@@ -90,9 +92,6 @@ def get_dt(current_time: float) -> float:
     return datetime.now().timestamp() - current_time
 
 
-    
-
-
 def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: float) -> dict:
     """
     This function will read gps data from the serial monitor and parse the
@@ -142,7 +141,8 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
                 distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long)
                 prev_lat, prev_long = latitude_degrees, longitude_degrees
             else:
-                d_distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long) - distance
+                d_distance = abs(get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long) - distance)
+                getSQL.insert_into_db(d_distance)
                 distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long)
 
 
@@ -158,7 +158,7 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
         "Longitude": longitude_degrees, 
         "Altitude": altitude,
         "Bearing": get_magnetometer_data(), 
-        "Speed": abs(speed_kph),
+        "Speed": speed_kph,
         "Distance": distance,
         "Time": time,
         "prevLat": prev_lat,
