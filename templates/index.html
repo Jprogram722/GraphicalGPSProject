@@ -34,6 +34,11 @@
     <body>
 
         <div id="map"></div>
+        <div id="distance-selector" style="visibility: hidden;" onclick="toggleModal()" >
+            <div onclick="{event.stopPropagation()}">
+                <h1>this is a modal lmao</h1>
+            </div>
+        </div>
 
         <script>
             var panImg = "{{ url_for('static', filename='images/material/pan_tool.png') }}";

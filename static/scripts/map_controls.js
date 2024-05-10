@@ -7,6 +7,39 @@ compassH2 = L.DomUtil.create("h2");
 statusH2.innerHTML = "Loading...";
 compassH2.innerHTML = "Loading...";
 
+/**
+ * The route select is a simple HTML dropdown list that selects from a preset list of locations found in locations.js.
+ * If you want to add more locations to the dropdown, edit the JSON data inside that file.
+ */
+L.Control.Dropdown = L.Control.extend({
+    onAdd: map => {
+        var selectList = L.DomUtil.create("select");
+        selectList.classList.add("leaflet-location-select")
+
+        defaultText = L.DomUtil.create("option");
+        defaultText.text = "Select a destination";
+        defaultText.value = -1;
+        defaultText.disabled = true;
+        defaultText.hidden = true;
+        selectList.appendChild(defaultText);
+        selectList.value = -1;
+
+        for (var i = 0; i < locations.length; i++) {
+            var opt = L.DomUtil.create("option");
+            opt.text = 
+            opt.value = 
+            selectList.appendChild(opt);
+        }
+
+        return selectList;
+    },
+    onRemove: map => {
+
+    }
+});
+L.control.dropdown = function(opts) {
+    return new L.Control.Dropdown(opts);
+}
 
 /**
  * This button toggles/untoggles map centering on the user marker. Helpful if you need your end user to
@@ -18,7 +51,7 @@ L.Control.ToggleDragging = L.Control.extend({
         button.classList.add("leaflet-toggle-dragging");
         button.innerHTML = createImageElement(panImg);
 
-        button.onclick = function(){
+        button.onclick = () => {
             let buttonText = button.innerHTML;
             button.innerHTML = buttonText == createImageElement(panImg) ? createImageElement(pinImg) : createImageElement(panImg);
             if (draggingEnabled) {
@@ -85,3 +118,35 @@ L.control.compass = (opts) => {
 const updateCompass = (text) => {
     compassH2.innerHTML = text;
 } 
+
+/**
+ * Button to display a modal window.
+ */
+L.Control.ShowModal = L.Control.extend({
+    onAdd: map => {
+        var button = L.DomUtil.create("button");
+        button.classList.add("leaflet-show-modal");
+        
+        button.onclick = () => {
+            toggleModal();
+        }
+
+        return button;
+    }
+})
+L.control.showModal = (opts) => {
+    return new L.Control.ShowModal(opts);
+}
+
+/**
+ * Helper function, toggles the modal
+ */
+const toggleModal = () => {
+    modal = document.querySelector("#distance-selector");
+    if (modal.style.visibility === "visible") {
+        modal.style.visibility = "hidden";
+    }
+    else {
+        modal.style.visibility = "visible";
+    }
+}

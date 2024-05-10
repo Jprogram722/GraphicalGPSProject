@@ -11,15 +11,18 @@ body {
     z-index: 1;
 }
 
-#location {
-    margin-left: 20px;
+#distance-selector {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
 }
 
-#compass {
-    margin-right: 20px;
+#distance-selector div {
+    padding: 50px;
 }
 
-.leaflet-toggle-dragging {
+.leaflet-toggle-dragging, .leaflet-show-modal {
     width: 75px;
     height: 75px;
 }

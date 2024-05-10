@@ -3,7 +3,7 @@ let destinationCoords;
 
 /** 
  * Update the current route's line and itinerary (e.g. marker moved or a different destination was selected)
- * @param {L.latLng} destination
+ * @param {Array} destination
  */
 const updateRoute = (destination) => {
     destinationCoords = destination;
