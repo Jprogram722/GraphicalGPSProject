@@ -83,11 +83,30 @@ def get_distance_data() -> tuple:
 
         return {"totalDistance": total_distance, "avgDistance": avg_distance}
 
-    except:
-        print("could not get data from database")
+    except Exception as err:
+        print(err)
         conn.close()
 
         return {"msg": "Failed to get data"}
 
+def reset_db():
+
+    """
+    This function will reset the table
+    """
+
+    conn, cursor = connect_db()
+
+    try:
+        cursor.execute("DELETE FROM distances")
+
+        print("everything is deleted")
+
+        conn.commit()
+        conn.close()
+    except Exception as err:
+        print(err)
+
+
 if __name__ == "__main__":
-    get_distance_data()
+    reset_db()
