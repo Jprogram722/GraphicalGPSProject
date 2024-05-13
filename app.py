@@ -33,14 +33,19 @@ def getMap(filename):
 @app.route("/api/get-total-distance")
 def get_distance():
     response = getSQL.get_distance_data()
-
     return response
 
 @app.route("/api/get-locations")
 def get_locations():
     response = getSQL.get_locations_data()
-
     return response
+
+@app.route("/api/insert-location", methods = ["POST"])
+def insert_location():
+    req = request.get_json()
+    print(req)
+    return jsonify({"msg": f"{req['msg']}"})
+
 
 if __name__ == '__main__':
     app.run()
