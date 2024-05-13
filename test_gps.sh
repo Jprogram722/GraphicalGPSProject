@@ -13,4 +13,4 @@ cd /home/graphicgps/GraphicGPSProject/GraphicalGPSProject
 .venv/bin/python3 app.py &
 cd ../osrm-backend
 docker start angry_babbage &
-chromium-browser "127.0.0.1:5000" 
+chromium-browser "127.0.0.1:5000" --kiosk
