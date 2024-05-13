@@ -158,7 +158,7 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
     if(time == 0):
         time = datetime.now().timestamp()
     else:
-        speed_kph = (distance/ get_dt(time)) * 60 # convert seconds to hours
+        speed_kph = (distance/ get_dt(time)) * 3600 # convert seconds to hours (60 seconds * 60 minutes = 1 hour)
         time = datetime.now().timestamp()
 
     # close the serial port when done with it
