@@ -151,7 +151,7 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
                 prev_lat, prev_long = latitude_degrees, longitude_degrees
             else:
                 distance = abs(get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long))
-                getSQL.insert_into_db(distance)
+                getSQL.insert_into_distance_table(distance)
                 prev_lat, prev_long = latitude_degrees, longitude_degrees
 
     # get a current time before inserting into the database

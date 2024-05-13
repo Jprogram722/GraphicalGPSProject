@@ -28,17 +28,24 @@ L.Control.Dropdown = L.Control.extend({
         selectList.appendChild(defaultText);
         selectList.value = -1;
 
-        for (var i = 0; i < locations.length; i++) {
-            var opt = L.DomUtil.create("option");
-            opt.text = 
-            opt.value = 
-            selectList.appendChild(opt);
+        data = getLocationsData()
+        .then(data => {
+            for (var i = 0; i < data.length; i++) {
+                var opt = L.DomUtil.create("option");
+                opt.text = data[i].Name
+                opt.value = `${data[i].Latitude},${data[i].Longitude}`
+                selectList.appendChild(opt);
+            }
+        });
+
+        selectList.onchange = () => {
+            // don't do anything without a valid value
+            if (selectList.value !== -1) {
+                updateRoute(selectList.value.split(','))
+            }
         }
 
         return selectList;
-    },
-    onRemove: map => {
-
     }
 });
 L.control.dropdown = function(opts) {
@@ -73,14 +80,6 @@ L.Control.ToggleDragging = L.Control.extend({
 })
 L.control.toggleDragging = (opts) => {
     return new L.Control.ToggleDragging(opts);
-}
-
-/**
- * Helper function, returns an img element with the specified path as src.
- * @param {String} url
- */
-const createImageElement = (url) => {
-    return `<img src="${url}">`
 }
 
 /**
@@ -143,8 +142,28 @@ L.control.showModal = (opts) => {
     return new L.Control.ShowModal(opts);
 }
 
+
+
+
 /**
- * Helper function, toggles the modal
+ * Fetch the locations JSON array from the API 
+ */
+const getLocationsData = async () => {
+    const res = await fetch("/api/get-locations");
+    let data = await res.json();
+    return data;
+}
+
+/**
+ * Returns an img element with the specified path as src.
+ * @param {String} url
+ */
+const createImageElement = (url) => {
+    return `<img src="${url}">`
+}
+
+/**
+ * Turn the modal on/off.
  */
 const toggleModal = () => {
     modalContainer.style.display = "flex";
