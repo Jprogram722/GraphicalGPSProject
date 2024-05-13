@@ -121,9 +121,11 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
         pi_array = pi_str.split(",")
 	
         frame_array = append_sentance(pi_array, frame_array)
-    
+
+
     # get data from the GPS readout
     latitude_mag, latitude_dir, longitude_mag, longitude_dir, altitude = get_GPGGA_data(frame_array) 
+
     if(altitude != ""):
         altitude = float(altitude)
             
@@ -153,7 +155,7 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
                 prev_lat, prev_long = latitude_degrees, longitude_degrees
 
     # get a current time before inserting into the database
-    if(time == 0 and distance == 0):
+    if(time == 0):
         time = datetime.now().timestamp()
     else:
         speed_kph = (distance/ get_dt(time)) * 60 # convert seconds to hours
@@ -257,4 +259,4 @@ def read_accelerometer_data():
 
 
 if __name__ == "__main__":
-    print(get_distance(44.669760041923766, -63.61331353180912, 44.66509534295309, -63.61149362455218))
+    print(read_I2C_devices())

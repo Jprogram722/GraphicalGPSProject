@@ -30,11 +30,11 @@ def getMap(filename):
     response.accept_ranges = 'bytes'
     return response
 
-if __name__ == '__main__':
-    app.run()
-
 @app.route("/api/get-total-distance")
 def get_distance():
     response = getSQL.get_distance_data()
 
     return response
+
+if __name__ == '__main__':
+    app.run()
