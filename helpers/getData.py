@@ -179,6 +179,14 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
     # return { "Latitude": 44.11111111111, "Longitude": -61.2222222222, "Altitude": 435.231223,"Bearing": get_magnetometer_data(), "Speed": 31.11111111 }
 
 def get_magnetometer_data() -> float:
+    """
+    This function will read data from the magnetometer
+    and return the angle that the user is pointing relative to the north pole
+
+    Example:
+    >>> get_magnetometer_data()
+    >>> 352.2
+    """
 
     i2c = board.I2C()
     qmc = qmc5883l.QMC5883L(i2c)
@@ -186,8 +194,6 @@ def get_magnetometer_data() -> float:
     
     # get x, y, and z for magnetometer
     x, y, z = qmc.magnetic
-
-    # print(f"x:{x:.2f}Gs, y:{y:.2f}Gs, z{z:.2f}Gs")
 
     # get the angle in degrees (143 is the offset)
     angle = math.degrees(math.atan2(y, x)) - 143
