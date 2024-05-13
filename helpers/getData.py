@@ -142,9 +142,9 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
                 distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long)
                 prev_lat, prev_long = latitude_degrees, longitude_degrees
             else:
-                d_distance = abs(get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long) - distance)
-                getSQL.insert_into_db(d_distance)
                 distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long)
+                getSQL.insert_into_db(d_distance)
+                prev_lat, prev_long = latitude_degrees, longitude_degrees
 
 
     if(time == 0 and d_distance == 0):
@@ -245,4 +245,4 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    print(get_dt(datetime(2024, 5, 9, 13, 58, 0)))
+    print(get_distance(44.669760041923766, -63.61331353180912, 44.66509534295309, -63.61149362455218))

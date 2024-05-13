@@ -27,7 +27,7 @@
 
 .leaflet-display-status, .leaflet-compass {
     background-color: rgba(131, 207, 255, 0.7);
-    border-radius: 15px;
+    border-radius: 4px;
 }
 
 .leaflet-display-status h2, .leaflet-compass h2 {

@@ -1,4 +1,11 @@
+/*
 
+    THIS FILE IS THE MAIN FILE FOR THE LEAFLET APP.
+
+*/
+
+
+// init all this to zero on start up as we don't want previous data interfering with new data
 localStorage.setItem("prevLat", "0");
 localStorage.setItem("prevLong", "0");
 localStorage.setItem("distance", "0");
