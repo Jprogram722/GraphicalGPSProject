@@ -103,12 +103,13 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
     >>> {"Latitude": float, "Longitude": float, "Bearing": int}
     """
 
+    # open and read from this serial port at a baud rate of 9600
     piCom = serial.Serial('/dev/serial0', 9600)
 
+    # init some variables
     latitude_degrees = longitude_degrees = altitude = 0
     speed_kph: float = 0
     frame_array = []
-    d_distance: float = 0
 
     while (len(frame_array) < 2):
 
@@ -121,37 +122,45 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
 	
         frame_array = append_sentance(pi_array, frame_array)
     
-
+    # get data from the GPS readout
     latitude_mag, latitude_dir, longitude_mag, longitude_dir, altitude = get_GPGGA_data(frame_array) 
     if(altitude != ""):
         altitude = float(altitude)
             
     if(latitude_mag != "" and longitude_mag != ""):
-        print(latitude_mag, longitude_mag)
+        # convert latitude from degree, minute, seconds to decimal degrees
         latitude_degrees = float(latitude_mag[:2]) + (float(latitude_mag[2:]) / 60)
+        # if in the sourthern hemisphere
         if(latitude_dir == "S"):
             latitude_degrees *= -1
+        # convert longitude from degree, minute, seconds to decimal degrees
         longitude_degrees = float(longitude_mag[:3]) + (float(longitude_mag[3:]) / 60)
+        # if in the western hemisphere
         if(longitude_dir == "W"):
             longitude_degrees *= -1
 
         if(prev_lat == 0 and prev_long == 0):
+            # new coordinates become old coordinates
             prev_lat, prev_long = latitude_degrees, longitude_degrees
         else:
+            # get distance before inputting into db
             if(distance == 0):
-                distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long)
+                distance = abs(get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long))
                 prev_lat, prev_long = latitude_degrees, longitude_degrees
             else:
-                distance = get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long)
-                getSQL.insert_into_db(d_distance)
+                distance = abs(get_distance(latitude_degrees, longitude_degrees, prev_lat, prev_long))
+                getSQL.insert_into_db(distance)
                 prev_lat, prev_long = latitude_degrees, longitude_degrees
 
-
-    if(time == 0 and d_distance == 0):
+    # get a current time before inserting into the database
+    if(time == 0 and distance == 0):
         time = datetime.now().timestamp()
     else:
-        speed_kph = (d_distance / get_dt(time)) * 60 # convert seconds to hours
+        speed_kph = (distance/ get_dt(time)) * 60 # convert seconds to hours
         time = datetime.now().timestamp()
+
+    # close the serial port when done with it
+    piCom.close()
     
     # real return
     return { 
