@@ -27,13 +27,21 @@ body {
     height: 75px;
 }
 
-.leaflet-toggle-dragging img {
+.leaflet-toggle-dragging img, .leaflet-show-modal img {
     width: 75%;
     height: 75%;
 }
 
 .leaflet-display-status, .leaflet-compass {
-    padding: 10px;
+    padding: 10px 5px 5px 10px;
     margin: 0px;
     margin-top: 20px;
+}
+
+.leaflet-routing-alt {
+    max-height: 160px;
+}
+
+.leaflet-routing-alt-minimized {
+    display: none;
 }

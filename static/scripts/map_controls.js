@@ -130,6 +130,7 @@ L.Control.ShowModal = L.Control.extend({
     onAdd: map => {
         var button = L.DomUtil.create("button");
         button.classList.add("leaflet-show-modal");
+        button.innerHTML = createImageElement(statsImg)
         
         button.onclick = () => {
             toggleModal();
