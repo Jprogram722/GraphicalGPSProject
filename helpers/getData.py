@@ -253,9 +253,6 @@ def read_accelerometer_data():
 
     average_accl_data
 
-def main() -> None:
-    print(get_magnetometer_data())
-
 
 
 
