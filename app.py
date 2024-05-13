@@ -36,5 +36,12 @@ def get_distance():
 
     return response
 
+@app.route("/api/insert-location", methods = ["POST"])
+def insert_location():
+    req = request.get_json()
+    print(req)
+    return jsonify({"msg": f"{req['msg']}"})
+
+
 if __name__ == '__main__':
     app.run()

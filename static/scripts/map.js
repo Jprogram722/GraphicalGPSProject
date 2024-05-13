@@ -11,6 +11,22 @@ localStorage.setItem("prevLong", "0");
 localStorage.setItem("distance", "0");
 localStorage.setItem("time", "0");
 
+(async function () {
+    let res = await fetch(
+        "/api/insert-location", {
+            method: "POST",
+            headers : {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"msg": "Hello"})
+        }
+    );
+
+    console.log(await res.json());
+
+})()
+
 /**
  * Update the coordinates for the user marker.
  * it will also use the old and new coordinates to calculate the bearing for the rotation angle
