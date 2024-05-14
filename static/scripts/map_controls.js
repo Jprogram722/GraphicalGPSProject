@@ -139,6 +139,7 @@ L.Control.ShowModal = L.Control.extend({
         return button;
     }
 })
+
 L.control.showModal = (opts) => {
     return new L.Control.ShowModal(opts);
 }

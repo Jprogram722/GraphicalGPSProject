@@ -76,8 +76,9 @@ def get_distance_data() -> tuple:
             timestamp = datetime.strptime(row[1], format_string)
             if datetime.now() - timestamp < timedelta(weeks = 12):
                 total_distance += row[0]
+                
         
-        avg_distance = total_distance / 84
+        avg_distance = total_distance / 12
 
         conn.close()
 

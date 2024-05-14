@@ -45,3 +45,10 @@ body {
 .leaflet-routing-alt-minimized {
     display: none;
 }
+
+.simple-keyboard{
+    display: none;
+    position: absolute;
+    bottom: 0;
+    z-index: 3;
+}

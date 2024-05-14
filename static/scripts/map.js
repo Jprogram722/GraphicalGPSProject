@@ -115,7 +115,7 @@ const getDistanceData = async () => {
 
     statsContainer.innerHTML = `
     Total distance traveled in 12 weeks is: ${Math.round(data.totalDistance * 10**2) / 10**2}km<br>
-    Avg distance per day is: ${Math.round(data.avgDistance * 10**3) / 10**3}km`
+    Avg distance per week is: ${Math.round(data.avgDistance * 10**3) / 10**3}km`
 }
 
 let server = window.location;

@@ -24,8 +24,10 @@
         <!-- MISC. NPM PACKAGES BEGIN -->
         <script src="{{ url_for('static', filename='node_modules/protomaps-leaflet/dist/protomaps-leaflet.min.js') }}"></script>
         <script src="{{ url_for('static', filename='node_modules/leaflet-rotatedmarker/leaflet.rotatedMarker.js') }}"></script>
+        <script src="{{ url_for('static', filename='node_modules/simple-keyboard/build/index.js') }}"></script>
         <!-- MISC. NPM PACKAGES END --> 
 
+        <link rel="stylesheet" href="{{ url_for('static', filename='node_modules/simple-keyboard/build/css/index.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}" />
         <link rel="stylesheet" href="{{ url_for('static', filename='css/layouts.css') }}" />
         <title>GPS Map</title>
@@ -39,15 +41,16 @@
                 <p id="stats"></p>  
             </div>
         </div>
+        <div class="simple-keyboard"></div>
 
         <script>
             var panImg = "{{ url_for('static', filename='images/material/pan_tool.png') }}";
             var pinImg = "{{ url_for('static', filename='images/material/pin_drop.png') }}";
             var statsImg = "{{ url_for('static', filename='images/material/man_running.png') }}";
         </script>
-        <script src="{{ url_for('static', filename='scripts/map_controls.js') }}"></script>
-        <script src="{{ url_for('static', filename='scripts/map_routing.js') }}"></script>
-        <script src="{{ url_for('static', filename='scripts/map.js' ) }}"></script>
-        
     </body>
+    <script src="{{ url_for('static', filename='scripts/map_controls.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/map_routing.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/map_keyboard.js') }}"></script>
+    <script src="{{ url_for('static', filename='scripts/map.js' ) }}"></script>
 </html>
