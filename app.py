@@ -5,12 +5,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    getSQL.create_db()
+    getSQL.create_distances_table()
     return render_template('index.html')
 
 @app.route("/api/get-data")
 def getArduinoData():
-    
+
     distance = float(request.args.get('distance'))
     time = float(request.args.get('time'))
     prev_long = float(request.args.get('prev-long'))
@@ -33,14 +33,18 @@ def getMap(filename):
 @app.route("/api/get-total-distance")
 def get_distance():
     response = getSQL.get_distance_data()
+    return response
 
+@app.route("/api/get-locations")
+def get_locations():
+    response = getSQL.get_locations_data()
     return response
 
 @app.route("/api/insert-location", methods = ["POST"])
 def insert_location():
     req = request.get_json()
-    print(req)
-    return jsonify({"msg": f"{req['msg']}"})
+    getSQL.insert_into_locations_table(req.get("location_name"), req.get("latitude"), req.get("longitude"))
+    return jsonify({"msg": f"Successfully added {req.get('location_name')} to the database."})
 
 
 if __name__ == '__main__':
