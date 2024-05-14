@@ -7,7 +7,7 @@ compassH2 = L.DomUtil.create("h2");
 statusH2.innerHTML = "Loading...";
 compassH2.innerHTML = "Loading...";
 
-const modalContainer = document.querySelector("#distance-selector");
+const modals = document.querySelectorAll(".modal");
 
 let isVisable = false;
 
@@ -17,8 +17,11 @@ let isVisable = false;
  */
 L.Control.Dropdown = L.Control.extend({
     onAdd: map => {
+        var container = L.DomUtil.create("div");
+        container.classList.add("leaflet-locations")
+
         var selectList = L.DomUtil.create("select");
-        selectList.classList.add("leaflet-location-select")
+        selectList.classList.add("leaflet-locations-select")
 
         defaultText = L.DomUtil.create("option");
         defaultText.text = "Select a destination";
@@ -27,17 +30,7 @@ L.Control.Dropdown = L.Control.extend({
         defaultText.hidden = true;
         selectList.appendChild(defaultText);
         selectList.value = -1;
-
-        data = getLocationsData()
-        .then(data => {
-            for (var i = 0; i < data.length; i++) {
-                var opt = L.DomUtil.create("option");
-                opt.text = data[i].Name
-                opt.value = `${data[i].Latitude},${data[i].Longitude}`
-                selectList.appendChild(opt);
-            }
-        });
-
+        getLocationsData(selectList)
         selectList.onchange = () => {
             // don't do anything without a valid value
             if (selectList.value !== -1) {
@@ -45,7 +38,15 @@ L.Control.Dropdown = L.Control.extend({
             }
         }
 
-        return selectList;
+        var button = L.DomUtil.create("button");
+        button.innerText = "Save Location";
+        button.onclick = () => {
+            toggleModal('location-name-selector')
+        }
+
+        container.appendChild(button);
+        container.appendChild(selectList);
+        return container;
     }
 });
 L.control.dropdown = function(opts) {
@@ -132,7 +133,8 @@ L.Control.ShowModal = L.Control.extend({
         button.innerHTML = createImageElement(statsImg)
         
         button.onclick = () => {
-            toggleModal();
+            toggleModal('distance-selector');
+            getDistanceData();
         }
 
         return button;
@@ -146,12 +148,25 @@ L.control.showModal = (opts) => {
 
 
 /**
- * Fetch the locations JSON array from the API 
+ * Fetch the locations JSON array from the API and populate the select list
+ * @param {HTMLElement} selectList
  */
-const getLocationsData = async () => {
+const getLocationsData = async (selectList) => {
+    selectList.value = "-1";
+    // clear the entire select list
+    while (selectList.options.length > 1) {
+        selectList.remove(1);
+    }
     const res = await fetch("/api/get-locations");
-    let data = await res.json();
-    return data;
+    await res.json()
+    .then(data => {
+        for (var i = 0; i < data.length; i++) {
+            var opt = L.DomUtil.create("option");
+            opt.text = data[i].Name
+            opt.value = `${data[i].Latitude},${data[i].Longitude}`
+            selectList.appendChild(opt);
+        }
+    });
 }
 
 /**
@@ -163,13 +178,21 @@ const createImageElement = (url) => {
 }
 
 /**
- * Turn the modal on/off.
+ * Turn a modal on/off.
+ * @param {String} modal
  */
-const toggleModal = () => {
-    modalContainer.style.display = "flex";
-    getDistanceData();
+const toggleModal = (modal) => {
+    let modalContainer = document.querySelector(`#${modal}`)
+    if (modalContainer.style.display === "flex") {
+        modalContainer.style.display = "none";
+    }
+    else {
+        modalContainer.style.display = "flex";
+    }
 }
 
-modalContainer.addEventListener("click", () => {
-    modalContainer.style.display = "none";
+modals.forEach((modal) => {
+    modal.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
 });

@@ -91,8 +91,8 @@ def insert_into_locations_table(location_name: str, latitude: float, longitude: 
         
         conn.commit()
         conn.close()
-    except:
-        print("Could not insert data into the locations table")
+    except Exception as err:
+        print(err)
         conn.close()
 
 def get_distance_data() -> tuple:
@@ -141,7 +141,7 @@ def get_locations_data() -> tuple:
 
         cursor.execute(
             """
-            SELECT * FROM locations
+            SELECT * FROM locations ORDER BY location_name ASC
             """)
         
         locations = []

@@ -43,8 +43,8 @@ def get_locations():
 @app.route("/api/insert-location", methods = ["POST"])
 def insert_location():
     req = request.get_json()
-    print(req)
-    return jsonify({"msg": f"{req['msg']}"})
+    getSQL.insert_into_locations_table(req.get("location_name"), req.get("latitude"), req.get("longitude"))
+    return jsonify({"msg": f"Successfully added {req.get('location_name')} to the database."})
 
 
 if __name__ == '__main__':

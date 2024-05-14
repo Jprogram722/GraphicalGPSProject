@@ -26,3 +26,23 @@ const mapRouting =  L.Routing.control({
     addWaypoints: false,
     position: 'bottomright'
 });
+
+document.querySelector('#location-save-button').addEventListener("click", async () => {
+    locationName = document.querySelector('#location-save-name').value;
+    let res = await fetch(
+        "/api/insert-location", {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({"location_name": locationName, "latitude": destinationCoords.lat, "longitude": destinationCoords.lng})
+        }
+    );
+    res = await res.json();
+    toggleModal('location-name-selector');
+    // refresh the select list
+    selectList = document.querySelector('.leaflet-locations-select');
+    getLocationsData(selectList);
+    console.log(res);
+})

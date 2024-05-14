@@ -34,10 +34,17 @@
     <body>
 
         <div id="map"></div>
-        <div id="distance-selector">
+        <div id="distance-selector" class="modal">
             <div>
                 <p id="stats"></p>  
             </div>
+        </div>
+        <div id="location-name-selector" class="modal">
+            <div onclick="event.stopPropagation();">
+                <p>Enter a name:</p>
+                <input id="location-save-name" type="text">
+                <button id="location-save-button">Save Location</button>
+            </div>            
         </div>
 
         <script>
