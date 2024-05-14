@@ -39,9 +39,11 @@ L.Control.Dropdown = L.Control.extend({
         }
 
         var button = L.DomUtil.create("button");
+        button.classList.add("pre-modal-save-loc")
         button.innerText = "Save Location";
         button.onclick = () => {
-            toggleModal('location-name-selector')
+            toggleModal('location-name-selector');
+            toggleKeyboard();
         }
 
         container.appendChild(button);
@@ -192,8 +194,20 @@ const toggleModal = (modal) => {
     }
 }
 
+const toggleKeyboard = () => {
+    const keyboardContainer = document.querySelector(".simple-keyboard");
+    if (keyboardContainer.style.display === "block"){
+        keyboardContainer.style.display = "none";
+    }
+    else {
+        keyboardContainer.style.display = "block";
+    }
+}
+
 modals.forEach((modal) => {
+    const keyboardContainer = document.querySelector(".simple-keyboard");
     modal.addEventListener("click", () => {
         modal.style.display = "none";
+        keyboardContainer.style.display = "none"
     });
 });

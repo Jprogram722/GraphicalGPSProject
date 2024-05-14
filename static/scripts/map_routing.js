@@ -41,6 +41,7 @@ document.querySelector('#location-save-button').addEventListener("click", async 
     );
     res = await res.json();
     toggleModal('location-name-selector');
+    toggleKeyboard();
     // refresh the select list
     selectList = document.querySelector('.leaflet-locations-select');
     getLocationsData(selectList);

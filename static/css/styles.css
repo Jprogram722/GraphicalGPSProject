@@ -18,18 +18,35 @@ html{
 .leaflet-toggle-dragging, .leaflet-show-modal {
     border: 2px solid rgba(0,0,0,0.2);
     background-clip: padding-box;
-    background-color: white;
+    background-color: #e4e4e7;
     border-radius: 4px;
+    cursor: pointer;
 }
+
+.leaflet-toggle-dragging:active, .leaflet-show-modal:active{
+    background-color: #d4d4d8;
+} 
 
 .leaflet-display-status, .leaflet-compass {
     border: 2px solid rgba(0,0,0,0.2);
     background-clip: padding-box;
-    background-color: white;
+    background-color: #e4e4e7;
     border-radius: 4px;
 }
 
 .leaflet-display-status h2, .leaflet-compass h2 {
     color: black;
     font-size: 18px;
+}
+
+.leaflet-locations {
+    width: 400px;
+    right: 0;
+}
+
+.leaflet-locations-select {
+    font-size: x-large;
+    font-family: 'Noto Sans Bold', sans-serif;
+    background-color: #e4e4e7;
+    border-radius: 4px;
 }

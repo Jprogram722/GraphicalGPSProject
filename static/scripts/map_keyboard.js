@@ -9,28 +9,26 @@ const myKeyboard = new Keyboard({
     'default': [
       '1 2 3 4 5 6 7 8 9 0 {bksp}',
       'q w e r t y u i o p',
-      '{lock} a s d f g h j k l {enter}',
-      '{shift} z x c v b n m , .',
-      '{space}'
+      'a s d f g h j k l',
+      'z x c v b n m , .',
+      '{lock} {space}'
     ],
     'lock': [
       '1 2 3 4 5 6 7 8 9 0 {bksp}',
       'Q W E R T Y U I O P',
-      'default A S D F G H J K L {enter}',
-      '{shift} Z X C V B N M , .',
-      '{space}'
+      'A S D F G H J K L',
+      'Z X C V B N M , .',
+      'default {space}'
     ]
   },
-  //onChange: input => onChange(input),
+  // onChange: input => onChange(input),
   onKeyPress: button => onKeyPress(button)
 });
 
-// function onChange(input) {
-//   document.querySelector(".input").value = input;
-//   console.log("Input changed", input);
-// }
-
 function onKeyPress(button) {
+
+  const inputBox = document.querySelector("#location-save-name");
+
   if(button === "{lock}" || button === "{shift}"){
     myKeyboard.setOptions({
       layoutName: "lock"
@@ -41,8 +39,17 @@ function onKeyPress(button) {
       layoutName: "default"
     })
   }
+  else if(button === "{bksp}" && inputBox.value.length > 0){
+    inputVal = inputBox.value
+    stringArr = inputVal.split("");
+    stringArr.pop();
+    inputBox.value = stringArr.join("");
+  }
+  else if (button === "{bksp}" && inputBox.value.length === 0){
+    
+  }
   else{
-
+    inputBox.value += button;
   }
   console.log("Button pressed", button);
 }
