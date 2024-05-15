@@ -39,14 +39,12 @@ html{
     font-size: 18px;
 }
 
-.leaflet-locations {
-    width: 400px;
-    right: 0;
-}
-
 .leaflet-locations-select {
-    font-size: x-large;
+    font-size: 20px;
     font-family: 'Noto Sans Bold', sans-serif;
-    background-color: #e4e4e7;
+    background-color: #ffffff;
     border-radius: 4px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    background-clip: padding-box;
+    text-align: center;
 }

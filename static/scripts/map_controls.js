@@ -17,9 +17,6 @@ let isVisable = false;
  */
 L.Control.Dropdown = L.Control.extend({
     onAdd: map => {
-        var container = L.DomUtil.create("div");
-        container.classList.add("leaflet-locations")
-
         var selectList = L.DomUtil.create("select");
         selectList.classList.add("leaflet-locations-select")
 
@@ -38,21 +35,31 @@ L.Control.Dropdown = L.Control.extend({
             }
         }
 
+        return selectList;
+    }
+});
+L.control.dropdown = function(opts) {
+    return new L.Control.Dropdown(opts);
+}
+
+/**
+ * A button that brings up a modal to save the currently selected destination point as an item in the dropdown list.
+ */
+L.Control.LocationSave = L.Control.extend({
+    onAdd: map => {
         var button = L.DomUtil.create("button");
-        button.classList.add("pre-modal-save-loc")
-        button.innerText = "Save Location";
+        button.classList.add("pre-modal-save-loc");
+        button.innerHTML = createImageElement(saveImg)
         button.onclick = () => {
             toggleModal('location-name-selector');
             toggleKeyboard();
         }
 
-        container.appendChild(button);
-        container.appendChild(selectList);
-        return container;
+        return button;
     }
 });
-L.control.dropdown = function(opts) {
-    return new L.Control.Dropdown(opts);
+L.control.locationSave = function(opts) {
+    return new L.Control.LocationSave(opts);
 }
 
 /**

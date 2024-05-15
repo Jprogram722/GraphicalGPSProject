@@ -65,6 +65,11 @@ button {
     background-color: #15803d;
 }
 
+.leaflet-locations-select {
+    width: 320px;
+    height: 50px;
+}
+
 .pre-modal-save-loc{
     font-size: x-large;
     margin-right: 5px;
@@ -77,12 +82,12 @@ button {
     background-color: #d4d4d8;
 }
 
-.leaflet-toggle-dragging, .leaflet-show-modal {
+.leaflet-toggle-dragging, .leaflet-show-modal, .pre-modal-save-loc {
     width: 75px;
     height: 75px;
 }
 
-.leaflet-toggle-dragging img, .leaflet-show-modal img {
+.leaflet-toggle-dragging img, .leaflet-show-modal img, .pre-modal-save-loc img {
     width: 75%;
     height: 75%;
 }
