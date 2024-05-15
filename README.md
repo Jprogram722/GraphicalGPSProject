@@ -60,3 +60,14 @@ docker run -t -i -p 5500:5500 -v "${PWD}:/data" kradenko/osrm-backend:arm64 osrm
 ```
 
 Then run the Python script. Your GPS should be available on localhost:5000.
+
+## Physical Setup
+
+This project uses the following commponents
+
+1. Raspberry Pi 4 Model B
+2. Adafruit Ultimate GPS Breakout v3
+3. GY-271 QMC5883l Magnetometer
+4. Freenove 5 Inch Touchscreen Monitor
+
+![alt-text](./physical-pics/RaspberryPi.jpg)
