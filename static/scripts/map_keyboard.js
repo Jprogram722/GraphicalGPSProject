@@ -48,6 +48,9 @@ function onKeyPress(button) {
   else if (button === "{bksp}" && inputBox.value.length === 0){
     
   }
+  else if(button === "{space}"){
+    inputBox.value += " ";
+  }
   else{
     inputBox.value += button;
   }
