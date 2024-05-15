@@ -70,4 +70,4 @@ This project uses the following commponents
 3. GY-271 QMC5883l Magnetometer
 4. Freenove 5 Inch Touchscreen Monitor
 
-![alt-text](./physical-pics/RaspberryPi.jpg)
+![picture of Raspberry Pi](./physical-pics/RaspberryPi.jpg)
