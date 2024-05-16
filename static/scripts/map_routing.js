@@ -19,7 +19,6 @@ const updateRoute = (destination) => {
 
 // create the routing functionality
 const mapRouting =  L.Routing.control({
-    // FIXME: currently only detects a server running under localhost:5500
     serviceUrl: 'http://localhost:5500/route/v1',
     fitSelectedRoutes: false,
     draggableWaypoints: false,
@@ -53,23 +52,16 @@ document.querySelector('#location-save-button').addEventListener("click", async 
         // refresh the select list
         selectList = document.querySelector('.leaflet-locations-select');
         getLocationsData(selectList);
-        console.log(res);  
+        console.log(res);
     }
-    // let res = await fetch(
-    //     "/api/insert-location", {
-    //         method: "POST",
-    //         headers: {
-    //             'Accept': 'application/json',
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify({"location_name": locationName, "latitude": destinationCoords.lat, "longitude": destinationCoords.lng})
-    //     }
-    // );
-    // res = await res.json();
-    // toggleModal('location-name-selector');
-    // toggleKeyboard();
-    // // refresh the select list
-    // selectList = document.querySelector('.leaflet-locations-select');
-    // getLocationsData(selectList);
-    // console.log(res);
-})
+}); 
+
+document.querySelector('#confirm-btn').addEventListener("click", () => {
+    resetDB();
+    window.location.reload();
+});
+
+
+document.querySelector('#deny-btn').addEventListener("click", () => {
+    toggleModal("reset-confirm");
+});

@@ -50,6 +50,13 @@
                 <p id="validation-msg"></p>
             </div>            
         </div>
+        <div id="reset-confirm" class="modal">
+		<div onclick="event.stopPropagation();">
+                <p>Are you sure you want to reset</p>
+                <button id="confirm-btn">Yes</button>
+		<button id="deny-btn">No</button>
+            </div>
+        </div>
 
         <script>
             var panImg = "{{ url_for('static', filename='images/material/pan_tool.png') }}";

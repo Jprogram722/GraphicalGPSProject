@@ -68,7 +68,7 @@ L.Control.ResetDB = L.Control.extend({
         button.classList.add("pre-modal-save-loc");
         button.innerHTML = createImageElement(resetImg)
         button.onclick = () => {
-            resetDB();
+            toggleModal("reset-confirm");
         }
 
         return button;
