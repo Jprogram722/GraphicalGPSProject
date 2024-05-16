@@ -4,7 +4,6 @@
 
 */
 
-
 // init all this to zero on start up as we don't want previous data interfering with new data
 localStorage.setItem("prevLat", "0");
 localStorage.setItem("prevLong", "0");
@@ -135,6 +134,7 @@ map.setView([44.650627, -63.597140], 16);
 L.control.toggleDragging({ position: 'bottomleft' }).addTo(map);
 L.control.showModal({ position: "bottomleft" }).addTo(map);
 L.control.locationSave({ position: "bottomleft" }).addTo(map);
+L.control.ResetDB({ position: "bottomleft" }).addTo(map);
 L.control.displayStatus({ position: 'topleft'}).addTo(map);
 L.control.compass({ position: "topright"}).addTo(map);
 mapRouting.addTo(map);

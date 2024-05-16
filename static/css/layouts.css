@@ -85,7 +85,14 @@ button {
 .leaflet-toggle-dragging, .leaflet-show-modal, .pre-modal-save-loc {
     width: 75px;
     height: 75px;
+    cursor: pointer;
 }
+
+.leaflet-toggle-dragging:active, .leaflet-show-modal:active, .pre-modal-save-loc:active {
+    background-color: #d4d4d8;
+}
+
+
 
 .leaflet-toggle-dragging img, .leaflet-show-modal img, .pre-modal-save-loc img {
     width: 75%;

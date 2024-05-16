@@ -46,6 +46,11 @@ def insert_location():
     getSQL.insert_into_locations_table(req.get("location_name"), req.get("latitude"), req.get("longitude"))
     return jsonify({"msg": f"Successfully added {req.get('location_name')} to the database."})
 
+@app.route("/api/reset-db", methods=["DELETE"])
+def reset_sqlite():
+    getSQL.reset_db()
+    return jsonify({"msg": "Database Reset"})
+
 
 if __name__ == '__main__':
     app.run()

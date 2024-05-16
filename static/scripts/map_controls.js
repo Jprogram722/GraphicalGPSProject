@@ -62,6 +62,22 @@ L.control.locationSave = function(opts) {
     return new L.Control.LocationSave(opts);
 }
 
+L.Control.ResetDB = L.Control.extend({
+    onAdd: map => {
+        var button = L.DomUtil.create("button");
+        button.classList.add("pre-modal-save-loc");
+        button.innerHTML = createImageElement(resetImg)
+        button.onclick = () => {
+            resetDB();
+        }
+
+        return button;
+    }
+});
+L.control.ResetDB = function(opts) {
+    return new L.Control.ResetDB(opts);
+}
+
 /**
  * This button toggles/untoggles map centering on the user marker. Helpful if you need your end user to
  * pan out the map to view their destination and stuff.
@@ -209,6 +225,18 @@ const toggleKeyboard = () => {
     else {
         keyboardContainer.style.display = "block";
     }
+}
+
+const resetDB = async () => {
+    let res = await fetch("/api/reset-db",
+        {
+            method: "DELETE"
+        }
+    );
+
+    let data = await res.json();
+
+    console.log(data);
 }
 
 modals.forEach((modal) => {
