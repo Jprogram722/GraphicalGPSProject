@@ -29,21 +29,47 @@ const mapRouting =  L.Routing.control({
 
 document.querySelector('#location-save-button').addEventListener("click", async () => {
     locationName = document.querySelector('#location-save-name').value;
-    let res = await fetch(
-        "/api/insert-location", {
-            method: "POST",
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({"location_name": locationName, "latitude": destinationCoords.lat, "longitude": destinationCoords.lng})
-        }
-    );
-    res = await res.json();
-    toggleModal('location-name-selector');
-    toggleKeyboard();
-    // refresh the select list
-    selectList = document.querySelector('.leaflet-locations-select');
-    getLocationsData(selectList);
-    console.log(res);
+    if(locationName === ""){
+        const validationMsg = document.querySelector('#validation-msg');
+        validationMsg.textContent = "Please Enter A Name Or Press The Background To Close";
+        setTimeout(() => {
+            validationMsg.textContent = "";
+        }, 2000);
+    }
+    else{
+        let res = await fetch(
+            "/api/insert-location", {
+                method: "POST",
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({"location_name": locationName, "latitude": destinationCoords.lat, "longitude": destinationCoords.lng})
+            }
+        );
+        res = await res.json();
+        toggleModal('location-name-selector');
+        toggleKeyboard();
+        // refresh the select list
+        selectList = document.querySelector('.leaflet-locations-select');
+        getLocationsData(selectList);
+        console.log(res);  
+    }
+    // let res = await fetch(
+    //     "/api/insert-location", {
+    //         method: "POST",
+    //         headers: {
+    //             'Accept': 'application/json',
+    //             'Content-Type': 'application/json'
+    //         },
+    //         body: JSON.stringify({"location_name": locationName, "latitude": destinationCoords.lat, "longitude": destinationCoords.lng})
+    //     }
+    // );
+    // res = await res.json();
+    // toggleModal('location-name-selector');
+    // toggleKeyboard();
+    // // refresh the select list
+    // selectList = document.querySelector('.leaflet-locations-select');
+    // getLocationsData(selectList);
+    // console.log(res);
 })

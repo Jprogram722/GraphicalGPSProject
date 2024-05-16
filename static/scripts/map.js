@@ -62,14 +62,16 @@ const rotateMarker = (bearing) => {
  */
 const updateLatLongOverlay = (data) => {
     let HTMLstring = "";
+
+    // The multiply by 100 devide by 100 is to round to 2 decimal places
     if(data.Latitude){
-       HTMLstring += `Latitude: ${Math.round(currentMarker._latlng.lat * 100) / 100}<br>`; 
+       HTMLstring += `Latitude: ${Math.round(currentMarker._latlng.lat * 100) / 100}°<br>`; 
     }
     if(data.Longitude){
-        HTMLstring += `Longitude: ${Math.round(currentMarker._latlng.lng * 100) / 100}<br>`; 
+        HTMLstring += `Longitude: ${Math.round(currentMarker._latlng.lng * 100) / 100}°<br>`; 
     }
     if(data.Altitude){
-        HTMLstring += `Altitude: ${Math.round(data.Altitude * 100) / 100}<br>`
+        HTMLstring += `Altitude: ${Math.round(data.Altitude * 100) / 100}m<br>`
     }
     if(data.Speed){
         HTMLstring += `Speed: ${Math.round(data.Speed * 100) / 100}km/h`;

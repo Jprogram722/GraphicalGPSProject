@@ -32,8 +32,8 @@ button {
 
 .modal div {
     position: absolute;
-    width: 400px;
-    top: 15vh;
+    width: 450px;
+    top: 13vh;
     border-radius: 4px;
     padding: 25px;
 }
