@@ -81,3 +81,8 @@ This project uses the following commponents
 5. A 5000 mAh LiPO Battery
 <p align="center"><img src="./physical-pics/Battery.jpg" alt="Picture Of The Battery"/></p>
 
+6. A 16GB micro SD card
+<p align="center"><img src="./physical-pics/sdCard.jpg" alt="Picture Of The SD card"/></p>
+
+
+
