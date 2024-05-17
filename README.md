@@ -69,7 +69,7 @@ This project uses the following commponents
 <p align="center"><img src="./physical-pics/RaspberryPi.jpg" alt="Picture Of The Raspberry Pi"/></p>
 
 2. Adafruit Ultimate GPS Breakout v3
-<p align="center"><img src="./physical-pics/GPS(1).jpg" alt="Picture Of The GPS Module"/></p>
+<p align="center"><img src="./physical-pics/GPS (1).jpg" alt="Picture Of The GPS Module"/></p>
 
 3. GY-271 QMC5883l Magnetometer
 <p align="center"><img src="./physical-pics/Mag_front.jpg" alt="Picture Of The Magnetometer Front"/></p>
@@ -84,5 +84,44 @@ This project uses the following commponents
 6. A 16GB micro SD card
 <p align="center"><img src="./physical-pics/sdCard.jpg" alt="Picture Of The SD card"/></p>
 
+OS that was used for this project is Raspbian OS 64 bit. make sure you have that installed on your micro SD card before proceeding otherwise flash the OS to your micro SD card.
 
+## Component Installation
 
+When using pin numbers or names I will be refering to this image which is from the [Raspberry Pi Official Documentation](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html).
+
+<p align="center"><img src="./physical-pics/Raspberry_pi_pinout_diagram.png" alt="Picture of Raspberry Pi pinouts"/></p>
+
+### Adafruit Ultimate GPS Breakout v3
+
+The Adafruit Ultimate GPS Breakout v3 reads data into serial port 0 of the raspberry pi and can be powered by a 5v or 3.3v power supply. it will provide you information in the form of GPS sentances. the details of these sentances can be veiwed on [GPS - NMEA sentence information](https://aprs.gids.nl/nmea/).
+
+To connect it to the raspberry pi directly attach:
+- vin pin on the GPS module to the 3.3v or 5v pin on the raspberry pi.
+- The GND pin on the GPS to the Ground pin on the Raspberry Pi
+- TX pin on the GPS to the TXD (GPIO 14) pin on the Raspberry Pi
+- RX pin on the GPS to the RXD (GPIO 15) pin on the Raspberry Pi
+
+You will need to install a couple of packages before you can read from the GPS. When you boot into Raspbian OS you will need to open the terminal and run `sudo apt update` then after that `sudo apt upgrade`. Then you will need to install gpsd and gpsd-clinets after this is done. run the command `sudo apt-get install gpsd gpsd-clients`. you should be able to run the command `cat /dev/serial0` to see GPS data coming from the module to serial port 0. **THIS MODULE WILL ONLY WORK OUTSIDE**.
+
+### QMC5883l GY-271 Magnetometer
+
+The QMC5883l is a module that measures the strength of the magnetic fields that interact with it. in this case that will be the earth. The device uses a I2C serial bus to communicate with the Raspberry Pi. This includes a Serial Data Line (SDA) pinout and a Serial Clock Line (SCL) pinout. The devices measures the strengh of the magnetic field on 3-axis (x, y, and z). we will only be using the x, and y to calculate the azimuth (angle from magnetic north).
+
+The angle is calulated by getting the maximium and minimum values that the magnetometer reads for the x and y coordinates. **Think circle**. when y is max the angle should be 0°, when x is max the angle should be 90°, when y is minimum it should be 180°, and when x is at its minimum it should be 270°
+
+<p align="center"><img src="./physical-pics/circle-animation.gif" alt="Circle animation"/></p>
+
+From this we can see that 
+
+$$tan(\theta) = \frac{y}{x}$$
+
+now just rearrage to get
+
+$$ \theta = tan^{-1}\left(\frac{y}{x}\right) $$
+
+To wire this directly to the Raspberry Pi:
+ - Connect the VCC pin on the magnetometer to a 3.3v or 5v pin on the Raspberry Pi
+ - Connect the GND pin on the magnetometer to a GND pin on the Raspberry Pi
+ - Connect the SDA pin on the magnetometer to the SDA (GPIO 2) pin on the Raspberry Pi
+ - Connect the SCL pin on the magnetometer to the SCL (GPIO 3) pin on the Raspberry Pi

@@ -197,7 +197,7 @@ def get_magnetometer_data() -> float:
     # get x, y, and z for magnetometer
     x, y, z = qmc.magnetic
 
-    # get the angle in degrees (143 is the offset)
+    # get the angle in degrees (173 is the offset)
     angle = math.degrees(math.atan2(y, x)) - 173
     # no negative angles
     if angle < 0:
