@@ -48,3 +48,24 @@ html{
     background-clip: padding-box;
     text-align: center;
 }
+
+#confirm-msg {
+    font-size: x-large;
+}
+
+#confirm-btn {
+    font-size: x-large;
+    padding: 8px 15px 8px 15px;
+    background-color: #22c55e;
+    border: 2px solid black;
+    border-radius: 4px;
+}
+
+#deny-btn {
+    font-size: x-large;
+    padding: 8px 15px 8px 15px;
+    background-color: #dc2626;
+    border: 2px solid black;
+    border-radius: 4px;
+    margin-left: 20px
+}
