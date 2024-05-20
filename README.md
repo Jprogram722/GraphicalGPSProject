@@ -104,9 +104,30 @@ To connect it to the raspberry pi directly attach:
 
 You will need to install a couple of packages before you can read from the GPS. When you boot into Raspbian OS you will need to open the terminal and run `sudo apt update` then after that `sudo apt upgrade`. Then you will need to install gpsd and gpsd-clinets after this is done. run the command `sudo apt-get install gpsd gpsd-clients`. you should be able to run the command `cat /dev/serial0` to see GPS data coming from the module to serial port 0. **THIS MODULE WILL ONLY WORK OUTSIDE**.
 
+The type of data that this module provides is the users current latitude (in degree, minutes), longitude (in degree, minutes), and altitude (in meters above sea level).
+
+According to [latlong.net](https://www.latlong.net/degrees-minutes-seconds-to-decimal-degrees) 1 degree = 1 hour = 60 minutes. So to convert to just degrees use the following conversion:
+
+$$ Latitude = Degree + \frac{minutes}{60} $$
+
+The data from the GPS module is also used to get the users current speed. Here is the equation to get the distance traveled (also know as arc length)
+across the surface of the earth using latitude and longitude.
+
+$$ \Delta d = 2r\sin^{-1}\left(\sqrt{\sin^{2}\left(\frac{\theta_{2} - \theta_{1}}{2}\right) + \cos(\theta_{2})\cos(\theta_{1})\sin^{2}\left(\frac{\phi_{2} - \phi_{1}}{2}\right)}\right)$$
+
+Where:
+- $\theta$ is latitude
+- $\phi$ is the longitude
+
+A good exercise would be to derive this equation yourself to see if it's correct!
+
+Now to get the speed we just to get the time that has elapsed when the last position was taken and when the current distance was taken which would be $\Delta t = t_2 - t_1$. then to get speed
+
+$$v = \frac{\Delta d}{\Delta t}$$
+
 ### QMC5883l GY-271 Magnetometer
 
-The QMC5883l is a module that measures the strength of the magnetic fields that interact with it. in this case that will be the earth. The device uses a I2C serial bus to communicate with the Raspberry Pi. This includes a Serial Data Line (SDA) pinout and a Serial Clock Line (SCL) pinout. The devices measures the strengh of the magnetic field on 3-axis (x, y, and z). we will only be using the x, and y to calculate the azimuth (angle from magnetic north).
+The QMC5883l is a module that measures the strength of the magnetic fields that interact with it. in this case that will be the earth. The device uses a I2C serial bus to communicate with the Raspberry Pi. This includes a Serial Data Line (SDA) pinout and a Serial Clock Line (SCL) pinout. The devices measures the strengh of the magnetic field on 3-axis (x, y, and z). we will only be using the x, and y to calculate the azimuthal angle (angle from magnetic north).
 
 The angle is calulated by getting the maximium and minimum values that the magnetometer reads for the x and y coordinates. **Think circle**. when y is max the angle should be 0°, when x is max the angle should be 90°, when y is minimum it should be 180°, and when x is at its minimum it should be 270°
 
@@ -114,14 +135,24 @@ The angle is calulated by getting the maximium and minimum values that the magne
 
 From this we can see that 
 
-$$tan(\theta) = \frac{y}{x}$$
+$$\tan(\theta) = \frac{y}{x}$$
 
 now just rearrage to get
 
-$$ \theta = tan^{-1}\left(\frac{y}{x}\right) $$
+$$ \theta = \tan^{-1}\left(\frac{y}{x}\right) $$
 
 To wire this directly to the Raspberry Pi:
  - Connect the VCC pin on the magnetometer to a 3.3v or 5v pin on the Raspberry Pi
  - Connect the GND pin on the magnetometer to a GND pin on the Raspberry Pi
  - Connect the SDA pin on the magnetometer to the SDA (GPIO 2) pin on the Raspberry Pi
  - Connect the SCL pin on the magnetometer to the SCL (GPIO 3) pin on the Raspberry Pi
+
+ ### 5000 mAh LiPO Battery
+
+ This device is powered by a 5000 mAh battery. on the battery contains 4 small lights that indicate battery life. when all dots are lit up that indicates its full. each dot takes about 2 hours to deplete so the device should last around 8 hours of non-stop use. it also contains a button to that when pressed down for a second will turn the battery on and off. **This is the primary way to turn on and off the device**.
+
+ To connect the battery to the Raspberry Pi insert the USB-A side into the battery and the USB-C side into the Raspberry Pi.
+
+ ### FreeNove 5 inche Touchscreen Display
+
+ This is the main display for the device. it is connected to the Raspberry Pi via a ribbion cable and does not need an external power source to power.
