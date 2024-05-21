@@ -111,7 +111,7 @@ According to [latlong.net](https://www.latlong.net/degrees-minutes-seconds-to-de
 $$ Latitude = Degree + \frac{minutes}{60} $$
 
 The data from the GPS module is also used to get the users current speed. Here is the equation to get the distance traveled (also know as arc length)
-across the surface of the earth using latitude and longitude.
+across the surface of the earth using latitude and longitude. Source: [Arkansa Unviversity](https://www.math.ksu.edu/~dbski/writings/haversine.pdf)
 
 $$ \Delta d = 2r\sin^{-1}\left(\sqrt{\sin^{2}\left(\frac{\theta_{2} - \theta_{1}}{2}\right) + \cos(\theta_{2})\cos(\theta_{1})\sin^{2}\left(\frac{\phi_{2} - \phi_{1}}{2}\right)}\right)$$
 
