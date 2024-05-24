@@ -128,6 +128,8 @@ npm install
 cd ..
 ```
 
+Some of our python packages are only available for Linux. If you are on Windows and you're receieving an error stating that some packages cannot be compiled, comment out everything relating to getData.py in order for the program to at least run.
+
 ### PMTiles
 
 The .PMTiles file makes up the images that comprise the map. The pictures of the roads, buildings, etc. are all stored within a .pmtiles archive. Our JavaScript file requests the Flask server for a specific file in the archive so that it can render it on the map.
