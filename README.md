@@ -90,27 +90,15 @@ To wire this directly to the Raspberry Pi:
  - Connect the SDA pin on the magnetometer to the SDA (GPIO 2) pin on the Raspberry Pi
  - Connect the SCL pin on the magnetometer to the SCL (GPIO 3) pin on the Raspberry Pi
 
- ### 5000 mAh LiPO Battery
+### 5000 mAh LiPO Battery
 
- This device is powered by a 5000 mAh battery. on the battery contains 4 small lights that indicate battery life. when all dots are lit up that indicates its full. each dot takes about 2 hours to deplete so the device should last around 8 hours of non-stop use. it also contains a button to that when pressed down for a second will turn the battery on and off. **This is the primary way to turn on and off the device**.
+This device is powered by a 5000 mAh battery. on the battery contains 4 small lights that indicate battery life. when all dots are lit up that indicates its full. each dot takes about 2 hours to deplete so the device should last around 8 hours of non-stop use. it also contains a button to that when pressed down for a second will turn the battery on and off. **This is the primary way to turn on and off the device**.
 
- To connect the battery to the Raspberry Pi insert the USB-A side into the battery and the USB-C side into the Raspberry Pi.
+To connect the battery to the Raspberry Pi insert the USB-A side into the battery and the USB-C side into the Raspberry Pi.
 
- ### FreeNove 5 inche Touchscreen Display
+### FreeNove 5 inche Touchscreen Display
 
- This is the main display for the device. it is connected to the Raspberry Pi via a ribbion cable and does not need an external power source to power.
-
- # How To Use
-
- When the Raspberry Pi is powered on it will boot into the chromium browser running the web app. this this the screen that you should see:
-
- <p align="center"><img src="./physical-pics/startup.jpg" alt="Circle animation"/></p>
-
- **If you do not see this page then restart the device**
-
- You will have to go outside for about 5 minutes to start getting any satillite data to your GPS. 
-
- Once you start getting sattilite data you should see
+This is the main display for the device. it is connected to the Raspberry Pi via a ribbion cable and does not need an external power source to power.
 
 ## Pi Requirements/Installation
 
