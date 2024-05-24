@@ -7,6 +7,7 @@ from datetime import datetime
 import math
 import qmc5883l
 import board
+import time
 from helpers import getSQL
 
 
@@ -42,17 +43,9 @@ def append_sentance(sentance_array: list, frame_array: list[list]) -> list[list]
     else:
         return frame_array
     
-def get_GPGGA_data(frame_array: list[list]):
-    for sentance in frame_array:
-        if(sentance[0] == "$GPGGA"):
-            # lat_mag, lat_dir, long_mag, long_dir, altitude
-            return sentance[2], sentance[3], sentance[4], sentance[5], sentance[9]
-        
-            
-def get_GPRMC_data(frame_array: list[list]):
-    for sentance in frame_array:
-	    if(sentance[0] == "$GPRMC"):
-	        return sentance[7]
+def get_GPGGA_data(sentance: list):
+    # lat_mag, lat_dir, long_mag, long_dir, altitude
+    return sentance[2], sentance[3], sentance[4], sentance[5], sentance[9]
 
 
 def get_distance(lat_mag: float, long_mag: float, prev_lat: float, prev_long: float) -> float:
@@ -100,7 +93,15 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
 
     Example:
     >>> parse_data_pi()
-    >>> {"Latitude": float, "Longitude": float, "Bearing": int}
+    >>> {"Latitude": float, 
+    "Longitude": float, 
+    "Altitude": float, 
+    "Bearing": int, 
+    "Speed": float, 
+    "Distance": float, 
+    "Time": float, 
+    "PrevLat": float,
+    "PrevLong": float}
     """
 
     # open and read from this serial port at a baud rate of 9600
@@ -109,9 +110,8 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
     # init some variables
     latitude_degrees = longitude_degrees = altitude = 0
     speed_kph: float = 0
-    frame_array = []
 
-    while (len(frame_array) < 2):
+    while True:
 
         # get data from the serial monitor
         pi_str = piCom.readline().decode('utf-8')
@@ -120,11 +120,11 @@ def parse_data_pi(distance: float, time: float, prev_lat: float, prev_long: floa
         # split string into array
         pi_array = pi_str.split(",")
 	
-        frame_array = append_sentance(pi_array, frame_array)
-
+        if (pi_array[0] == "$GPGGA"):
+            break
 
     # get data from the GPS readout
-    latitude_mag, latitude_dir, longitude_mag, longitude_dir, altitude = get_GPGGA_data(frame_array) 
+    latitude_mag, latitude_dir, longitude_mag, longitude_dir, altitude = get_GPGGA_data(pi_array) 
 
     if(altitude != ""):
         altitude = float(altitude)
@@ -190,20 +190,24 @@ def get_magnetometer_data() -> float:
     >>> 352.2
     """
 
-    i2c = board.I2C()
-    qmc = qmc5883l.QMC5883L(i2c)
+    try:
+        i2c = board.I2C()
+        qmc = qmc5883l.QMC5883L(i2c)
 
-    
-    # get x, y, and z for magnetometer
-    x, y, z = qmc.magnetic
+        
+        # get x, y, and z for magnetometer
+        x, y, z = qmc.magnetic
 
-    # get the angle in degrees (143 is the offset)
-    angle = math.degrees(math.atan2(y, x)) - 173
-    # no negative angles
-    if angle < 0:
-        angle = angle + 360
+        # get the angle in degrees (143 is the offset)
+        angle = round((math.degrees(math.atan(y/x)) * 2))
+        # no negative angles
+        if angle < 0:
+            angle = angle + 360
 
-    return round(angle,1)
+        return angle
+    except Exception as err:
+        print(err)
+        return 0
 
     
 def read_I2C_devices():
@@ -259,4 +263,26 @@ def read_accelerometer_data():
 
 
 if __name__ == "__main__":
-    print(read_I2C_devices())
+    # open and read from this serial port at a baud rate of 9600
+    i2c = board.I2C()
+    qmc = qmc5883l.QMC5883L(i2c)
+    while True:
+        i2c = board.I2C()
+        qmc = qmc5883l.QMC5883L(i2c)
+
+        
+        # get x, y, and z for magnetometer
+        x, y, z = qmc.magnetic
+
+        angle = 0
+
+        if x != 0:
+            angle = round(math.degrees(math.atan(y/x)) * 2)
+        elif x == 0:
+            angle = 180
+
+        if angle < 0:
+            angle = angle + 360
+
+        print(f"x: {x}, y: {y}, Theta: {angle}")
+        time.sleep(0.5)
